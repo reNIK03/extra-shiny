@@ -1,0 +1,54 @@
+{
+  "sources": [
+    {
+      "type": "blueprint:paletted_permutations",
+      "palette_key": "minecraft:trims/color_palettes/trim_palette",
+      "permutations": {
+        "amethyst": "minecraft:trims/color_palettes/amethyst",
+        "copper": "minecraft:trims/color_palettes/copper",
+        "diamond": "minecraft:trims/color_palettes/diamond",
+        "diamond_darker": "minecraft:trims/color_palettes/diamond_darker",
+        "emerald": "minecraft:trims/color_palettes/emerald",
+        "gold": "minecraft:trims/color_palettes/gold",
+        "gold_darker": "minecraft:trims/color_palettes/gold_darker",
+        "iron": "minecraft:trims/color_palettes/iron",
+        "iron_darker": "minecraft:trims/color_palettes/iron_darker",
+        "lapis": "minecraft:trims/color_palettes/lapis",
+        "netherite": "minecraft:trims/color_palettes/netherite",
+        "netherite_darker": "minecraft:trims/color_palettes/netherite_darker",
+        "quartz": "minecraft:trims/color_palettes/quartz",
+        "redstone": "minecraft:trims/color_palettes/redstone"
+      },
+      "textures": [
+        "extrashiny:trims/models/armor/cimmerian",
+        "extrashiny:trims/models/armor/cimmerian_leggings",
+        "extrashiny:trims/models/armor/memory",
+        "extrashiny:trims/models/armor/memory_leggings",
+        "extrashiny:trims/models/armor/damask",
+        "extrashiny:trims/models/armor/damask_leggings"
+      ]
+    },
+    {
+      "type": "blueprint:paletted_permutations",
+      "palette_key": "minecraft:trims/color_palettes/trim_palette",
+      "permutations": {
+        "extrashiny_cimmerian": "extrashiny:trims/color_palettes/cimmerian",
+        "extrashiny_cimmerian_darker": "extrashiny:trims/color_palettes/cimmerian_darker",
+        "extrashiny_damask": "extrashiny:trims/color_palettes/damask",
+        "extrashiny_damask_darker": "extrashiny:trims/color_palettes/damask_darker",
+        "extrashiny_labradorite": "extrashiny:trims/color_palettes/labradorite",
+        "extrashiny_osmium": "extrashiny:trims/color_palettes/osmium",
+        "extrashiny_osmium_darker": "extrashiny:trims/color_palettes/osmium_darker",
+        "extrashiny_vanadium": "extrashiny:trims/color_palettes/vanadium",
+        "extrashiny_vanadium_darker": "extrashiny:trims/color_palettes/vanadium_darker"
+      },
+      "sources": [
+        {
+          "type": "minecraft:directory",
+          "prefix": "trims/models/armor/",
+          "source": "trims/models/armor"
+        }
+      ]
+    }
+  ]
+}

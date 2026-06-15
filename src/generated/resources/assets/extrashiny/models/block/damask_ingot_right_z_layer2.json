@@ -1,0 +1,6 @@
+{
+  "parent": "extrashiny:block/template_ingot_right_z_layer2",
+  "textures": {
+    "ingot": "extrashiny:block/damask_ingot"
+  }
+}

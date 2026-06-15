@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "extrashiny:block/vanadium_brick_slab"
+    },
+    "type=double": {
+      "model": "extrashiny:block/vanadium_bricks"
+    },
+    "type=top": {
+      "model": "extrashiny:block/vanadium_brick_slab_top"
+    }
+  }
+}

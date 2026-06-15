@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "equipment",
+  "ingredients": [
+    {
+      "item": "minecraft:arrow"
+    },
+    {
+      "item": "extrashiny:labradorite"
+    }
+  ],
+  "result": {
+    "count": 4,
+    "item": "extrashiny:auroral_arrow"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "count": 1,
+  "ingredient": {
+    "item": "extrashiny:osmium_bricks"
+  },
+  "result": "extrashiny:osmium_brick_stairs"
+}

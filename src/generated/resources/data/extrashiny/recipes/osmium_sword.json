@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "L": {
+      "item": "extrashiny:osmium_ingot"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "L",
+    "L",
+    "S"
+  ],
+  "result": {
+    "item": "extrashiny:osmium_sword"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "X": {
+      "item": "extrashiny:vanadium_ingot"
+    }
+  },
+  "pattern": [
+    " X ",
+    "XRX",
+    " X "
+  ],
+  "result": {
+    "item": "extrashiny:radar"
+  },
+  "show_notification": true
+}

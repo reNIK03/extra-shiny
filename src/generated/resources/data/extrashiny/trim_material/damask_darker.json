@@ -1,0 +1,9 @@
+{
+  "asset_name": "extrashiny_damask_darker",
+  "description": {
+    "color": "#886674",
+    "translate": "trim_material.extrashiny.damask_darker"
+  },
+  "ingredient": "extrashiny:damask_ingot",
+  "item_model_index": -1.0
+}

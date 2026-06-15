@@ -1,0 +1,15 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "extrashiny:item/radar_00"
+  },
+  "overrides": [
+    { "predicate": { "state": 1 }, "model": "extrashiny:item/radar_01" },
+    { "predicate": { "state": 2 }, "model": "extrashiny:item/radar_02" },
+    { "predicate": { "state": 3 }, "model": "extrashiny:item/radar_03" },
+    { "predicate": { "state": 4 }, "model": "extrashiny:item/radar_04" },
+
+    { "predicate": { "state": 5 }, "model": "extrashiny:item/radar_05" },
+    { "predicate": { "state": 6 }, "model": "extrashiny:item/radar_06" }
+  ]
+}

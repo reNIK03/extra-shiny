@@ -1,0 +1,9 @@
+{
+  "asset_name": "extrashiny_vanadium_darker",
+  "description": {
+    "color": "#9C9AAF",
+    "translate": "trim_material.extrashiny.vanadium_darker"
+  },
+  "ingredient": "extrashiny:vanadium_ingot",
+  "item_model_index": -1.0
+}

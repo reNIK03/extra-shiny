@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "equipment",
+  "key": {
+    "L": {
+      "item": "extrashiny:ancient_lattice"
+    }
+  },
+  "pattern": [
+    "L L",
+    "L L"
+  ],
+  "result": {
+    "item": "extrashiny:cimmerian_boots"
+  },
+  "show_notification": true
+}

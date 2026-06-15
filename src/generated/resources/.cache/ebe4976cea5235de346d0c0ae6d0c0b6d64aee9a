@@ -1,0 +1,11 @@
+// 1.20.1	2026-04-22T20:28:57.2024018	Tags for minecraft:item mod id extrashiny
+2d769953f237f860b8f1e9df73fbb68a5c1f004f data/minecraft/tags/items/arrows.json
+62ed40758bfe40ecbb8a12c33868b067f139065c data/minecraft/tags/items/axes.json
+d23768e8df1355d3295b53e6e070a834aa490812 data/minecraft/tags/items/beacon_payment_items.json
+13982d4c6df17a947b31b09a801e42083653aac0 data/minecraft/tags/items/hoes.json
+edbf6c13fec72196b299cca63aafcead02da6b5c data/minecraft/tags/items/pickaxes.json
+bbbfa1615f65c621421320868c13d07eae8e6e8c data/minecraft/tags/items/shovels.json
+31b9f00b30782e9296abcff61a4c4646b7f24ef4 data/minecraft/tags/items/swords.json
+7813b5de4b078f53675193042335405cb741c80d data/minecraft/tags/items/trimmable_armor.json
+d186a22f94c58584b99a314f229944b19fd6bd93 data/minecraft/tags/items/trim_materials.json
+57e4d969074d3e0cd954b6734bbd0f07a9d52606 data/minecraft/tags/items/trim_templates.json

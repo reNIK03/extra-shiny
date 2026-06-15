@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "extrashiny:vanadium_ingot"
+  },
+  "base": {
+    "item": "minecraft:iron_horse_armor"
+  },
+  "result": {
+    "item": "extrashiny:vanadium_horse_armor"
+  },
+  "template": {
+    "item": "extrashiny:vanadium_upgrade_smithing_template"
+  }
+}

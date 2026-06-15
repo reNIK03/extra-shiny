@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_cimmerian_block": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "extrashiny:cimmerian_block"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "extrashiny:ancient_lattice_from_cimmerian_block"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_cimmerian_block",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "extrashiny:ancient_lattice_from_cimmerian_block"
+    ]
+  },
+  "sends_telemetry_event": false
+}

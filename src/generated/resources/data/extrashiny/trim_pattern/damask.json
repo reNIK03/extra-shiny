@@ -1,0 +1,7 @@
+{
+  "asset_id": "extrashiny:damask",
+  "description": {
+    "translate": "trim_pattern.extrashiny.damask"
+  },
+  "template_item": "extrashiny:damask_ingot"
+}

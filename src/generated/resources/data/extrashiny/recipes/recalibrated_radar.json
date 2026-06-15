@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "E": {
+      "item": "minecraft:echo_shard"
+    },
+    "R": {
+      "item": "extrashiny:radar"
+    }
+  },
+  "pattern": [
+    " E ",
+    "ERE",
+    " E "
+  ],
+  "result": {
+    "item": "extrashiny:recalibrated_radar"
+  },
+  "show_notification": true
+}

@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "O": {
+      "item": "extrashiny:osmium_ingot"
+    },
+    "R": {
+      "item": "minecraft:redstone"
+    },
+    "S": {
+      "item": "minecraft:stick"
+    }
+  },
+  "pattern": [
+    "O O",
+    "OSO",
+    "ORO"
+  ],
+  "result": {
+    "count": 6,
+    "item": "extrashiny:leap_rail"
+  },
+  "show_notification": true
+}

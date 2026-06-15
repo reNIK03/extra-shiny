@@ -1,0 +1,15 @@
+{
+  "type": "extrashiny:replace_item",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/stronghold_crossing"
+    },
+    {
+      "chance": 0.3,
+      "condition": "minecraft:random_chance"
+    }
+  ],
+  "replacement": "extrashiny:osmium_horse_armor",
+  "target": "minecraft:golden_horse_armor"
+}

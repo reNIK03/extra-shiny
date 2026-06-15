@@ -1,0 +1,34 @@
+{
+  "multipart": [
+    { "apply": { "model": "extrashiny:block/vanadium_bars_post_ends" } },
+
+    {
+      "apply": { "model": "extrashiny:block/vanadium_bars_post" },
+      "when": {
+        "north": "false",
+        "east": "false",
+        "south": "false",
+        "west": "false"
+      }
+    },
+
+    { "apply": { "model": "extrashiny:block/vanadium_bars_cap" },
+      "when": { "north": "true", "east": "false", "south": "false", "west": "false" }
+    },
+    { "apply": { "model": "extrashiny:block/vanadium_bars_cap", "y": 90 },
+      "when": { "east": "true", "north": "false", "south": "false", "west": "false" }
+    },
+
+    { "apply": { "model": "extrashiny:block/vanadium_bars_cap_alt" },
+      "when": { "south": "true", "north": "false", "east": "false", "west": "false" }
+    },
+    { "apply": { "model": "extrashiny:block/vanadium_bars_cap_alt", "y": 90 },
+      "when": { "west": "true", "north": "false", "east": "false", "south": "false" }
+    },
+
+    { "apply": { "model": "extrashiny:block/vanadium_bars_side" }, "when": { "north": "true" } },
+    { "apply": { "model": "extrashiny:block/vanadium_bars_side_alt" }, "when": { "south": "true" } },
+    { "apply": { "model": "extrashiny:block/vanadium_bars_side_alt", "y": 90 }, "when": { "west": "true" } },
+    { "apply": { "model": "extrashiny:block/vanadium_bars_side", "y": 90 }, "when": { "east": "true" } }
+  ]
+}

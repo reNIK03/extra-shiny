@@ -1,0 +1,13 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "extrashiny:vanadium_block"
+    }
+  ],
+  "result": {
+    "count": 9,
+    "item": "extrashiny:vanadium_ingot"
+  }
+}

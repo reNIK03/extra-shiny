@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/slab_top",
+  "textures": {
+    "bottom": "extrashiny:block/vanadium_bricks",
+    "side": "extrashiny:block/vanadium_bricks",
+    "top": "extrashiny:block/vanadium_bricks"
+  }
+}

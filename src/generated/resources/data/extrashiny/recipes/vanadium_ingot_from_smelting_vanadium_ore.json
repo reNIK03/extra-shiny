@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:smelting",
+  "category": "blocks",
+  "cookingtime": 200,
+  "experience": 0.3,
+  "group": "vanadium_ingot",
+  "ingredient": {
+    "item": "extrashiny:vanadium_ore"
+  },
+  "result": "extrashiny:vanadium_ingot"
+}

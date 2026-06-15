@@ -1,0 +1,16 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "extrashiny:block/labradorite_pillar_horizontal",
+      "x": 90,
+      "y": 90
+    },
+    "axis=y": {
+      "model": "extrashiny:block/labradorite_pillar"
+    },
+    "axis=z": {
+      "model": "extrashiny:block/labradorite_pillar_horizontal",
+      "x": 90
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_osmium_bricks": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "extrashiny:osmium_bricks"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "extrashiny:osmium_bricks_to_slab_stonecutter"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_osmium_bricks",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "extrashiny:osmium_bricks_to_slab_stonecutter"
+    ]
+  },
+  "sends_telemetry_event": false
+}

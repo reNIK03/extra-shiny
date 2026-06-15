@@ -1,0 +1,15 @@
+{
+  "type": "minecraft:smithing_transform",
+  "addition": {
+    "item": "extrashiny:vanadium_ingot"
+  },
+  "base": {
+    "item": "minecraft:iron_shovel"
+  },
+  "result": {
+    "item": "extrashiny:vanadium_shovel"
+  },
+  "template": {
+    "item": "extrashiny:vanadium_upgrade_smithing_template"
+  }
+}

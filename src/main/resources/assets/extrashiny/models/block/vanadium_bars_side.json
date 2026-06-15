@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/iron_bars_side",
+  "textures": {
+    "bars": "extrashiny:block/vanadium_bars",
+    "edge": "extrashiny:block/vanadium_bars_edge",
+    "particle": "extrashiny:block/vanadium_bars"
+  }
+}

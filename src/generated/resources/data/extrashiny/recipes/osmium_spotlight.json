@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "I": {
+      "item": "extrashiny:osmium_ingot"
+    },
+    "N": {
+      "item": "extrashiny:osmium_nugget"
+    },
+    "T": {
+      "item": "minecraft:torch"
+    }
+  },
+  "pattern": [
+    "III",
+    "TNT",
+    "NNN"
+  ],
+  "result": {
+    "item": "extrashiny:osmium_spotlight"
+  },
+  "show_notification": true
+}

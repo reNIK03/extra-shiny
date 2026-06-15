@@ -1,0 +1,7 @@
+{
+  "parent": "minecraft:block/cube_column",
+  "textures": {
+    "end": "extrashiny:block/labradorite_pillar_top",
+    "side": "extrashiny:block/labradorite_pillar"
+  }
+}

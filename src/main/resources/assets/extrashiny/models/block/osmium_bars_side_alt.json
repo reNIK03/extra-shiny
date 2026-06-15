@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/iron_bars_side_alt",
+  "textures": {
+    "bars": "extrashiny:block/osmium_bars",
+    "edge": "extrashiny:block/osmium_bars_edge",
+    "particle": "extrashiny:block/osmium_bars"
+  }
+}

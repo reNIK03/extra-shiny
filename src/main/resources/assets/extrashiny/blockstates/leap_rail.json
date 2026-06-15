@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "shape=north_south,powered=false": { "model": "extrashiny:block/leap_rail" },
+    "shape=east_west,powered=false": { "model": "extrashiny:block/leap_rail", "y": 90 },
+
+    "shape=ascending_north,powered=false": { "model": "extrashiny:block/leap_rail_raised" },
+    "shape=ascending_south,powered=false": { "model": "extrashiny:block/leap_rail_raised", "y": 180 },
+    "shape=ascending_east,powered=false": { "model": "extrashiny:block/leap_rail_raised", "y": 90 },
+    "shape=ascending_west,powered=false": { "model": "extrashiny:block/leap_rail_raised", "y": 270 },
+
+    "shape=north_south,powered=true": { "model": "extrashiny:block/leap_rail_on" },
+    "shape=east_west,powered=true": { "model": "extrashiny:block/leap_rail_on", "y": 90 },
+
+    "shape=ascending_north,powered=true": { "model": "extrashiny:block/leap_rail_raised_on" },
+    "shape=ascending_south,powered=true": { "model": "extrashiny:block/leap_rail_raised_on", "y": 180 },
+    "shape=ascending_east,powered=true": { "model": "extrashiny:block/leap_rail_raised_on", "y": 90 },
+    "shape=ascending_west,powered=true": { "model": "extrashiny:block/leap_rail_raised_on", "y": 270 }
+  }
+}

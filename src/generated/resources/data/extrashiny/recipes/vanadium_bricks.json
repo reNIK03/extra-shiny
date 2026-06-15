@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "building",
+  "key": {
+    "D": {
+      "item": "minecraft:deepslate"
+    },
+    "I": {
+      "item": "extrashiny:vanadium_ingot"
+    }
+  },
+  "pattern": [
+    "ID",
+    "DI"
+  ],
+  "result": {
+    "count": 4,
+    "item": "extrashiny:vanadium_bricks"
+  },
+  "show_notification": true
+}

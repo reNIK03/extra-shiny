@@ -1,0 +1,21 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": { "layer0": "extrashiny:item/recalibrated_radar_00" },
+  "overrides": [
+    { "predicate": { "extrashiny:state": 1 }, "model": "extrashiny:item/recalibrated_radar_01" },
+    { "predicate": { "extrashiny:state": 2 }, "model": "extrashiny:item/recalibrated_radar_02" },
+    { "predicate": { "extrashiny:state": 3 }, "model": "extrashiny:item/recalibrated_radar_03" },
+    { "predicate": { "extrashiny:state": 4 }, "model": "extrashiny:item/recalibrated_radar_04" },
+    { "predicate": { "extrashiny:state": 5 }, "model": "extrashiny:item/recalibrated_radar_05" },
+    { "predicate": { "extrashiny:state": 6 }, "model": "extrashiny:item/recalibrated_radar_06" },
+    { "predicate": { "extrashiny:state": 7 }, "model": "extrashiny:item/recalibrated_radar_07" },
+    { "predicate": { "extrashiny:state": 8 }, "model": "extrashiny:item/recalibrated_radar_08" },
+    { "predicate": { "extrashiny:state": 9 }, "model": "extrashiny:item/recalibrated_radar_09" },
+
+    { "predicate": { "extrashiny:state": 10 }, "model": "extrashiny:item/recalibrated_radar_10" },
+    { "predicate": { "extrashiny:state": 11 }, "model": "extrashiny:item/recalibrated_radar_11" },
+    { "predicate": { "extrashiny:state": 12 }, "model": "extrashiny:item/recalibrated_radar_12" },
+    { "predicate": { "extrashiny:state": 13 }, "model": "extrashiny:item/recalibrated_radar_13" },
+    { "predicate": { "extrashiny:state": 14 }, "model": "extrashiny:item/recalibrated_radar_14" }
+  ]
+}

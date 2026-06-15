@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "O": {
+      "item": "extrashiny:osmium_nugget"
+    },
+    "Q": {
+      "item": "minecraft:quartz"
+    },
+    "V": {
+      "item": "extrashiny:vanadium_nugget"
+    }
+  },
+  "pattern": [
+    "VOV",
+    "OQO",
+    "VOV"
+  ],
+  "result": {
+    "item": "extrashiny:memory_alloy"
+  },
+  "show_notification": true
+}

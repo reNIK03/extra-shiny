@@ -1,0 +1,15 @@
+{
+  "type": "extrashiny:replace_item",
+  "conditions": [
+    {
+      "condition": "forge:loot_table_id",
+      "loot_table_id": "minecraft:chests/abandoned_mineshaft"
+    },
+    {
+      "chance": 0.15,
+      "condition": "minecraft:random_chance"
+    }
+  ],
+  "replacement": "extrashiny:osmium_ingot",
+  "target": "minecraft:gold_ingot"
+}

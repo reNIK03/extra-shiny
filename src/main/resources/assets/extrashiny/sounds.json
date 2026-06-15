@@ -1,0 +1,155 @@
+{
+  "normalrefine": {
+    "subtitles": "sounds.extrashiny.normalrefine",
+    "sounds": [
+      "extrashiny:normalrefine1",
+      "extrashiny:normalrefine2",
+      "extrashiny:normalrefine3"
+    ]
+  },
+
+  "goldenrefine": {
+    "subtitles": "sounds.extrashiny.goldenrefine",
+    "sounds": [
+      "extrashiny:goldenrefine1",
+      "extrashiny:goldenrefine2",
+      "extrashiny:goldenrefine3"
+    ]
+  },
+
+  "vgolem_hurt": {
+    "subtitles": "entity.extrashiny.vgolem.hurt",
+    "sounds": [
+      "extrashiny:vgolemhurt1",
+      "extrashiny:vgolemhurt2",
+      "extrashiny:vgolemhurt3",
+      "extrashiny:vgolemhurt4"
+    ]
+  },
+
+  "vgolem_death": {
+    "subtitles": "entity.extrashiny.vgolem.death",
+    "sounds": [
+      "extrashiny:vgolemdeath"
+    ]
+  },
+
+  "vgolem_medium_hit": {
+    "sounds": [
+      "extrashiny:vgolemmatk"
+    ]
+  },
+
+  "vgolem_heavy_start": {
+    "sounds": [
+      "extrashiny:vgolemhatkstart"
+    ]
+  },
+
+  "vgolem_attack_end": {
+    "sounds": [
+      "extrashiny:vgolematkend"
+    ]
+  },
+
+  "vgolem_light_spin": {
+    "sounds": [
+      "extrashiny:vgolemlightspin"
+    ]
+  },
+
+  "vgolem_medium_spin": {
+    "sounds": [
+      "extrashiny:vgolemspin"
+    ]
+  },
+
+  "enforcer_death": {
+    "subtitles": "entity.extrashiny.enforcer.death",
+    "sounds": [
+      "extrashiny:enforcer_death"
+    ]
+  },
+
+  "enforcer_enraged": {
+    "subtitles": "entity.extrashiny.enforcer.enraged",
+    "sounds": [
+      "extrashiny:enforcer_enraged"
+    ]
+  },
+
+  "enforcer_hurt": {
+    "subtitles": "entity.extrashiny.enforcer.hurt",
+    "sounds": [
+      "extrashiny:enforcer_hurt1",
+      "extrashiny:enforcer_hurt2"
+    ]
+  },
+
+  "enforcer_howl": {
+    "subtitles": "entity.extrashiny.enforcer.howl",
+    "sounds": [
+      "extrashiny:enforcer_howl"
+    ]
+  },
+
+  "enforcer_idle": {
+    "subtitles": "entity.extrashiny.enforcer.idle",
+    "sounds": [
+      "extrashiny:enforcer_idle",
+      "extrashiny:enforcer_idle2"
+    ]
+  },
+
+  "enforcer_bite": {
+    "subtitles": "entity.extrashiny.enforcer.bite",
+    "sounds": [
+      "extrashiny:enforcer_bite"
+    ]
+  },
+  "labradorite_block": {
+    "sounds": [
+      "extrashiny:block/labradorite/break1",
+      "extrashiny:block/labradorite/break2",
+      "extrashiny:block/labradorite/break3",
+      "extrashiny:block/labradorite/break4"
+    ]
+  },
+
+  "damask_block": {
+    "sounds": [
+      "extrashiny:block/damask/break1",
+      "extrashiny:block/damask/break2",
+      "extrashiny:block/damask/break3",
+      "extrashiny:block/damask/break4"
+    ]
+  },
+
+  "osmium_block": {
+    "sounds": [
+      "extrashiny:block/osmium/break1",
+      "extrashiny:block/osmium/break2",
+      "extrashiny:block/osmium/break3",
+      "extrashiny:block/osmium/break4"
+    ]
+  },
+
+  "cimmerian_block": {
+    "sounds": [
+      "extrashiny:block/cimmerian/break1",
+      "extrashiny:block/cimmerian/break2",
+      "extrashiny:block/cimmerian/break3",
+      "extrashiny:block/cimmerian/break4"
+    ]
+  },
+
+  "vanadium_block": {
+    "sounds": [
+      "extrashiny:block/vanadium/break1",
+      "extrashiny:block/vanadium/break2",
+      "extrashiny:block/vanadium/break3",
+      "extrashiny:block/vanadium/break4"
+    ]
+  }
+
+}

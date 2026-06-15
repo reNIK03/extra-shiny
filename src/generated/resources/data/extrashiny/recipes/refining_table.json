@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "extrashiny:labradorite"
+    },
+    "L": {
+      "item": "minecraft:lapis_lazuli"
+    },
+    "O": {
+      "item": "minecraft:obsidian"
+    }
+  },
+  "pattern": [
+    "LLL",
+    "BOB",
+    "OOO"
+  ],
+  "result": {
+    "item": "extrashiny:refining_table"
+  },
+  "show_notification": true
+}

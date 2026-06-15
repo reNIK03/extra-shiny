@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "extrashiny:block/labradorite_brick_slab"
+    },
+    "type=double": {
+      "model": "extrashiny:block/labradorite_brick"
+    },
+    "type=top": {
+      "model": "extrashiny:block/labradorite_brick_slab_top"
+    }
+  }
+}

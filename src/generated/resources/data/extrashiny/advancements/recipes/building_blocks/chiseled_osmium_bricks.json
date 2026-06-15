@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_osmium_brick_slab": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "extrashiny:osmium_brick_slab"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "extrashiny:chiseled_osmium_bricks"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_osmium_brick_slab",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "extrashiny:chiseled_osmium_bricks"
+    ]
+  },
+  "sends_telemetry_event": false
+}

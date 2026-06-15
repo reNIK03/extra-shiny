@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "category": "misc",
+  "cookingtime": 100,
+  "experience": 0.5,
+  "group": "labradorite",
+  "ingredient": {
+    "item": "extrashiny:deepslate_labradorite_ore"
+  },
+  "result": "extrashiny:labradorite"
+}

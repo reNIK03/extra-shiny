@@ -1,0 +1,9 @@
+{
+  "asset_name": "extrashiny_labradorite",
+  "description": {
+    "color": "#5DA387",
+    "translate": "trim_material.extrashiny.labradorite"
+  },
+  "ingredient": "extrashiny:labradorite",
+  "item_model_index": -1.0
+}

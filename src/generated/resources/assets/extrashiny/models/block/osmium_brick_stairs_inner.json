@@ -1,0 +1,8 @@
+{
+  "parent": "minecraft:block/inner_stairs",
+  "textures": {
+    "bottom": "extrashiny:block/osmium_bricks",
+    "side": "extrashiny:block/osmium_bricks",
+    "top": "extrashiny:block/osmium_bricks"
+  }
+}

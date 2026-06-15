@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "type=bottom": {
+      "model": "extrashiny:block/osmium_brick_slab"
+    },
+    "type=double": {
+      "model": "extrashiny:block/osmium_bricks"
+    },
+    "type=top": {
+      "model": "extrashiny:block/osmium_brick_slab_top"
+    }
+  }
+}

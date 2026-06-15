@@ -1,0 +1,4 @@
+{
+  "parent": "minecraft:block/rail_raised_ne",
+  "textures": { "rail": "extrashiny:block/leap_rail_on" }
+}

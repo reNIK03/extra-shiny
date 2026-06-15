@@ -1,0 +1,9 @@
+{
+  "asset_name": "extrashiny_cimmerian",
+  "description": {
+    "color": "#4E3850",
+    "translate": "trim_material.extrashiny.cimmerian"
+  },
+  "ingredient": "extrashiny:ancient_lattice",
+  "item_model_index": -1.0
+}

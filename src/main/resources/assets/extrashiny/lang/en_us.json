@@ -1,0 +1,223 @@
+{
+  "item.extrashiny.vanadium_ingot": "Vanadium Ingot",
+  "item.extrashiny.raw_vanadium": "Raw Vanadium",
+  "item.extrashiny.vanadium_nugget": "Vanadium Nugget",
+
+  "item.extrashiny.labradorite": "Labradorite",
+
+  "item.extrashiny.radar": "Radar",
+
+  "item.extrashiny.vanadium_upgrade_smithing_template.applies_to": "Iron Equipment, Trident, Crossbow",
+  "item.extrashiny.vanadium_upgrade_smithing_template.ingredients": "Vanadium Ingot",
+
+  "item.extrashiny.vanadium_upgrade_smithing_template.base_slot_description": "Add trident/crossbow, iron armor, weapon, or tool",
+  "item.extrashiny.vanadium_upgrade_smithing_template.addition_slot_description": "Add Vanadium Ingot",
+
+  "enchantment.extrashiny.frost_edge": "Frost Edge",
+  "enchantment.extrashiny.glaciation": "Glaciation",
+  "enchantment.extrashiny.serration": "Serration",
+
+  "enchantment.extrashiny.frost_edge.desc": "Hits inflict freezing effect",
+  "enchantment.extrashiny.glaciation.desc": "Thrown tridends inflict freezing effect",
+  "enchantment.extrashiny.serration.desc": "Thrown tridents deal more damage per level",
+
+  "upgrade.extrashiny.vanadium_upgrade": "Vanadium Upgrade",
+
+  "trim_material.extrashiny.vanadium": "Vanadium Material",
+  "trim_material.extrashiny.labradorite": "Labradorite Material",
+  "trim_material.extrashiny.osmium": "Osmium Material",
+  "trim_material.extrashiny.cimmerian": "Cimmerian Material",
+  "trim_material.extrashiny.damask": "Damask Material",
+
+  "block.extrashiny.vanadium_block": "Block of Vanadium",
+  "block.extrashiny.raw_vanadium_block": "Block of Raw Vanadium",
+
+
+  "item.extrashiny.raw_osmium": "Raw Osmium",
+  "block.extrashiny.raw_osmium_block": "Block of Raw Osmium",
+  "block.extrashiny.osmium_block": "Block of Osmium",
+
+  "block.extrashiny.vanadium_bars": "Vanadium Bars",
+  "block.extrashiny.osmium_bars": "Osmium Bars",
+
+  "item.extrashiny.osmium_nugget": "Osmium Nugget",
+  "item.extrashiny.damask_nugget": "Damask Nugget",
+
+  "block.extrashiny.vanadium_ore": "Vanadium Ore",
+  "block.extrashiny.deepslate_vanadium_ore": "Deepslate Vanadium Ore",
+
+  "block.extrashiny.osmium_ore": "Osmium Ore",
+  "block.extrashiny.deepslate_osmium_ore": "Deepslate Osmium Ore",
+  "block.extrashiny.spotted_blackstone": "Spotted Blackstone",
+
+  "block.extrashiny.osmium_spotlight": "Osmium Spotlight",
+
+  "effect.extrashiny.wisdom": "Wisdom",
+  "effect.extrashiny.wisdom.description": "Boosts experience received by 20% per level.",
+
+  "effect.extrashiny.phantasm": "Phantasm",
+  "effect.extrashiny.wisdom.description": "Increases attack speed, movement speed and damage per mob in range.",
+
+  "item.minecraft.potion.effect.wisdom": "Potion of Wisdom",
+  "item.minecraft.potion.effect.strong_wisdom": "Potion of Wisdom",
+  "item.minecraft.potion.effect.long_wisdom": "Potion of Wisdom",
+
+  "item.minecraft.splash_potion.effect.wisdom": "Splash Potion of Wisdom",
+  "item.minecraft.splash_potion.effect.strong_wisdom": "Splash Potion of Wisdom",
+  "item.minecraft.splash_potion.effect.long_wisdom": "Splash Potion of Wisdom",
+
+  "item.minecraft.lingering_potion.effect.wisdom": "Lingering Potion of Wisdom",
+  "item.minecraft.lingering_potion.effect.strong_wisdom": "Lingering Potion of Wisdom",
+  "item.minecraft.lingering_potion.effect.long_wisdom": "Lingering Potion of Wisdom",
+
+  "item.minecraft.tipped_arrow.effect.wisdom": "Arrow of Wisdom",
+  "item.minecraft.tipped_arrow.effect.strong_wisdom": "Arrow of Wisdom",
+  "item.minecraft.tipped_arrow.effect.long_wisdom": "Arrow of Wisdom",
+
+  "item.minecraft.potion.effect.deceiver": "Potion of the Deceiver",
+  "item.minecraft.potion.effect.strong_deceiver": "Potion of the Deceiver",
+  "item.minecraft.potion.effect.long_deceiver": "Potion of the Deceiver",
+
+  "item.minecraft.splash_potion.effect.deceiver": "Splash Potion of the Deceiver",
+  "item.minecraft.splash_potion.effect.strong_deceiver": "Splash Potion of the Deceiver",
+  "item.minecraft.splash_potion.effect.long_deceiver": "Splash Potion of the Deceiver",
+
+  "item.minecraft.lingering_potion.effect.deceiver": "Lingering Potion of the Deceiver",
+  "item.minecraft.lingering_potion.effect.strong_deceiver": "Lingering Potion of the Deceiver",
+  "item.minecraft.lingering_potion.effect.long_deceiver": "Lingering Potion of the Deceiver",
+
+  "item.minecraft.tipped_arrow.effect.deceiver": "Arrow of the Deceiver",
+  "item.minecraft.tipped_arrow.effect.strong_deceiver": "Arrow of the Deceiver",
+  "item.minecraft.tipped_arrow.effect.long_deceiver": "Arrow of the Deceiver",
+
+  "item.extrashiny.memory_alloy": "Memory Alloy",
+
+  "block.extrashiny.labradorite_block": "Block of Labradorite",
+  "block.extrashiny.labradorite_ore": "Labradorite Ore",
+  "block.extrashiny.deepslate_labradorite_ore": "Deepslate Labradorite Ore",
+
+  "block.extrashiny.labradorite_brick": "Labradorite Bricks",
+  "block.extrashiny.labradorite_lamp": "Labradorite Lamp",
+  "block.extrashiny.labradorite_pillar": "Labradorite Pillar",
+
+  "block.extrashiny.labradorite_brick_stairs": "Labradorite Brick Stairs",
+  "block.extrashiny.labradorite_brick_wall": "Labradorite Brick Wall",
+  "block.extrashiny.labradorite_brick_slab": "Labradorite Brick Slab",
+
+  "block.extrashiny.vanadium_bricks": "Vanadium Plated Bricks",
+  "block.extrashiny.vanadium_brick_stairs": "Vanadium Plated Brick Stairs",
+  "block.extrashiny.vanadium_brick_slab": "Vanadium Plated Brick Slab",
+  "block.extrashiny.vanadium_brick_wall": "Vanadium Plated Brick Wall",
+  "block.extrashiny.chiseled_vanadium_bricks": "Chiseled Vanadium Plated Bricks",
+
+  "block.extrashiny.osmium_bricks": "Osmium Plated Bricks",
+  "block.extrashiny.osmium_brick_stairs": "Osmium Plated Brick Stairs",
+  "block.extrashiny.osmium_brick_slab": "Osmium Plated Brick Slab",
+  "block.extrashiny.osmium_brick_wall": "Osmium Plated Brick Wall",
+  "block.extrashiny.chiseled_osmium_bricks": "Chiseled Osmium Plated Bricks",
+
+  "block.extrashiny.leap_rail": "Leap Rail",
+
+  "block.extrashiny.refining_table": "Refining Table",
+
+  "container.extrashiny.refining_table": "Refine",
+
+  "sounds.extrashiny.normalrefine": "Refining Enchantment",
+
+  "sounds.extrashiny.goldenrefine": "Overcap Refine",
+
+  "item.extrashiny.bulwark": "Bulwark",
+
+  "item.extrashiny.vanadium_sword": "Vanadium Sword",
+  "item.extrashiny.vanadium_pickaxe": "Vanadium Pickaxe",
+  "item.extrashiny.vanadium_axe": "Vanadium Axe",
+  "item.extrashiny.vanadium_shovel": "Vanadium Shovel",
+  "item.extrashiny.vanadium_hoe": "Vanadium Hoe",
+
+  "item.extrashiny.vanadium_helmet": "Vanadium Helmet",
+  "item.extrashiny.vanadium_chestplate": "Vanadium Chestplate",
+  "item.extrashiny.vanadium_leggings": "Vanadium Leggings",
+  "item.extrashiny.vanadium_boots": "Vanadium Boots",
+
+  "item.extrashiny.vanadium_horse_armor": "Vanadium Horse Armor",
+  "item.extrashiny.osmium_horse_armor": "Osmium Horse Armor",
+  "item.extrashiny.damask_horse_armor": "Damask Horse Armor",
+
+  "attribute.extrashiny.damage_negation": "Physical Guard",
+  "attribute.extrashiny.shock_absorption": "Shock Absorption",
+  "attribute.extrashiny.armor_piercing": "Armor Piercing",
+  "attribute.modifier.plus.0": "+%s %s",
+  "extrashiny.tooltip.shock_absorption": "+%s%% Shock Absorption",
+
+  "item.extrashiny.vanadium_partisan": "Vanadium Partisan",
+  "item.extrashiny.vanadium_repeater": "Vanadium Repeater",
+
+
+  "item.extrashiny.vanadium_golem_spawn_egg": "Vanadium Golem Spawn Egg",
+
+  "entity.extrashiny.vanadium_golem": "Vanadium Golem",
+
+  "item.extrashiny.enforcer_spawn_egg": "Enforcer Spawn Egg",
+
+  "entity.extrashiny.enforcer": "Enforcer",
+
+  "item.extrashiny.osmium_ingot": "Osmium Ingot",
+
+  "item.extrashiny.osmium_helmet": "Osmium Helmet",
+  "item.extrashiny.osmium_chestplate": "Osmium Chestplate",
+  "item.extrashiny.osmium_leggings": "Osmium Leggings",
+  "item.extrashiny.osmium_boots": "Osmium Boots",
+
+  "item.extrashiny.osmium_sword": "Osmium Sword",
+  "item.extrashiny.osmium_pickaxe": "Osmium Pickaxe",
+  "item.extrashiny.osmium_axe": "Osmium Axe",
+  "item.extrashiny.osmium_shovel": "Osmium Shovel",
+  "item.extrashiny.osmium_hoe": "Osmium Hoe",
+
+  "item.extrashiny.moondial": "Moondial",
+
+  "item.extrashiny.auroral_arrow": "Auroral Arrow",
+
+  "item.extrashiny.moondial.phase.full_moon": "Full Moon",
+  "item.extrashiny.moondial.phase.waning_gibbous": "Waning Gibbous",
+  "item.extrashiny.moondial.phase.third_quarter": "Third Quarter",
+  "item.extrashiny.moondial.phase.waning_crescent": "Waning Crescent",
+  "item.extrashiny.moondial.phase.new_moon": "New Moon",
+  "item.extrashiny.moondial.phase.waxing_crescent": "Waxing Crescent",
+  "item.extrashiny.moondial.phase.first_quarter": "First Quarter",
+  "item.extrashiny.moondial.phase.waxing_gibbous": "Waxing Gibbous",
+  "item.extrashiny.moondial.phase.not_found": "Moon not found",
+
+  "item.extrashiny.recalibrated_radar": "Recalibrated Radar",
+
+  "trim_pattern.extrashiny.memory": "Memory Armor Trim",
+
+  "item.extrashiny.ancient_lattice": "Ancient Lattice",
+
+  "attribute.extrashiny.damage_rebound": "Damage Rebound",
+
+  "item.extrashiny.cimmerian_helmet": "Cimmerian Helmet",
+  "item.extrashiny.cimmerian_chestplate": "Cimmerian Chestplate",
+  "item.extrashiny.cimmerian_leggings": "Cimmerian Leggings",
+  "item.extrashiny.cimmerian_boots": "Cimmerian Boots",
+
+  "block.extrashiny.cimmerian_block": "Cimmerian Block",
+
+
+  "attribute.extrashiny.counter_thorns": "Counter Spike",
+  "attribute.extrashiny.crit_damage_bonus": "Critical Damage",
+
+  "item.extrashiny.damask_ingot": "Damask Ingot",
+  "block.extrashiny.damask_block": "Block of Damask",
+
+  "item.extrashiny.damask_sword": "Damask Sword",
+  "item.extrashiny.damask_pickaxe": "Damask Pickaxe",
+  "item.extrashiny.damask_axe": "Damask Axe",
+  "item.extrashiny.damask_shovel": "Damask Shovel",
+  "item.extrashiny.damask_hoe": "Damask Hoe",
+
+  "item.extrashiny.damask_helmet": "Damask Helmet",
+  "item.extrashiny.damask_chestplate": "Damask Chestplate",
+  "item.extrashiny.damask_leggings": "Damask Leggings",
+  "item.extrashiny.damask_boots": "Damask Boots"
+}

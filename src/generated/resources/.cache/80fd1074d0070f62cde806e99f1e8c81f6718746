@@ -1,0 +1,9 @@
+// 1.20.1	2026-06-14T10:25:10.8439452	Tags for minecraft:block mod id extrashiny
+b21abcbd496bc378239b189ff8fd323dd86d03e9 data/forge/tags/blocks/ores.json
+63eb4e8fc4eae7d8889a8cb5dca5c9cf6e8f68e9 data/minecraft/tags/blocks/beacon_base_blocks.json
+22f42b47d950f4dae8fa7ff20ff3dde086c38d5a data/minecraft/tags/blocks/fences.json
+fa2fcea82310019c5be31de8e8233cfe3d79ccb3 data/minecraft/tags/blocks/mineable/pickaxe.json
+4de336e36105d8966c5e9f8bfc25426d9b674f20 data/minecraft/tags/blocks/needs_diamond_tool.json
+94a6b65bc12025facc3aa7ca9558c6fcfb7bd344 data/minecraft/tags/blocks/needs_iron_tool.json
+327719e24e9fa62d7e28255d5c33d587611b8bc7 data/minecraft/tags/blocks/rails.json
+8eadcf3c916062a20d3c4de57a9327ce20bdf404 data/minecraft/tags/blocks/walls.json

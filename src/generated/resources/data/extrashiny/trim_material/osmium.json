@@ -1,0 +1,9 @@
+{
+  "asset_name": "extrashiny_osmium",
+  "description": {
+    "color": "#869BD8",
+    "translate": "trim_material.extrashiny.osmium"
+  },
+  "ingredient": "extrashiny:osmium_ingot",
+  "item_model_index": -1.0
+}

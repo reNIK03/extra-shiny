@@ -1,0 +1,18 @@
+{
+  "required": false,
+  "minVersion": "0.8",
+  "package": "net.r_nik.extrashiny.core.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "extrashiny.refmap.json",
+  "client": [
+    "HumanoidArmorLayerMixin",
+    "ThornsEnchantmentMixin",
+    "AbstractArrowMixin",
+    "HorseModelMixin",
+    "ProtectionEnchantmentMixin",
+    "ItemStackMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

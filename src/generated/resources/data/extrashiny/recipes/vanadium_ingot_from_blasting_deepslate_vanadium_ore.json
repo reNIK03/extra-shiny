@@ -1,0 +1,11 @@
+{
+  "type": "minecraft:blasting",
+  "category": "blocks",
+  "cookingtime": 100,
+  "experience": 0.3,
+  "group": "vanadium_ingot",
+  "ingredient": {
+    "item": "extrashiny:deepslate_vanadium_ore"
+  },
+  "result": "extrashiny:vanadium_ingot"
+}

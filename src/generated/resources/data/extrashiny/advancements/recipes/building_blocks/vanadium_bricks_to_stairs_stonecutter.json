@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "extrashiny:vanadium_bricks_to_stairs_stonecutter"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_vanadium_bricks": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "extrashiny:vanadium_bricks"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_vanadium_bricks",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "extrashiny:vanadium_bricks_to_stairs_stonecutter"
+    ]
+  },
+  "sends_telemetry_event": false
+}

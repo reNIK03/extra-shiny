@@ -1,0 +1,16 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "extrashiny:item/moondial_00"
+  },
+  "overrides": [
+    { "predicate": { "extrashiny:state": 1 }, "model": "extrashiny:item/moondial_01" },
+    { "predicate": { "extrashiny:state": 2 }, "model": "extrashiny:item/moondial_02" },
+    { "predicate": { "extrashiny:state": 3 }, "model": "extrashiny:item/moondial_03" },
+    { "predicate": { "extrashiny:state": 4 }, "model": "extrashiny:item/moondial_04" },
+    { "predicate": { "extrashiny:state": 5 }, "model": "extrashiny:item/moondial_05" },
+    { "predicate": { "extrashiny:state": 6 }, "model": "extrashiny:item/moondial_06" },
+    { "predicate": { "extrashiny:state": 7 }, "model": "extrashiny:item/moondial_07" },
+    { "predicate": { "extrashiny:state": 8 }, "model": "extrashiny:item/moondial_08" }
+  ]
+}

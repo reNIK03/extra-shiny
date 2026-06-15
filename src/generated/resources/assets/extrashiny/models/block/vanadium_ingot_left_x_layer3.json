@@ -1,0 +1,6 @@
+{
+  "parent": "extrashiny:block/template_ingot_left_x_layer3",
+  "textures": {
+    "ingot": "extrashiny:block/vanadium_ingot"
+  }
+}

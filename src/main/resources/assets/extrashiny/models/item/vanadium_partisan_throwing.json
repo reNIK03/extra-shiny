@@ -1,0 +1,20 @@
+{
+	"loader": "forge:separate_transforms",
+	"gui_light": "front",
+
+	"base": {
+		"parent": "extrashiny:item/vanadium_partisan_throwing_handheld"
+	},
+
+	"perspectives": {
+		"gui": {
+			"parent": "extrashiny:item/vanadium_partisan_item"
+		},
+		"ground": {
+			"parent": "extrashiny:item/vanadium_partisan_item"
+		},
+		"fixed": {
+			"parent": "extrashiny:item/vanadium_partisan_item"
+		}
+	}
+}

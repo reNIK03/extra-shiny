@@ -1,0 +1,28 @@
+{
+  "parent": "item/crossbow",
+  "textures": {
+    "layer0": "extrashiny:item/vanadium_repeater_standby"
+  },
+  "overrides": [
+    {
+      "predicate": {"pulling": 1},
+      "model": "extrashiny:item/vanadium_repeater_pulling_0"
+    },
+    {
+      "predicate": {"pull": 0.58},
+      "model": "extrashiny:item/vanadium_repeater_pulling_1"
+    },
+    {
+      "predicate": {"pull": 1.0},
+      "model": "extrashiny:item/vanadium_repeater_pulling_2"
+    },
+    {
+      "predicate": {"charged": 1},
+      "model": "extrashiny:item/vanadium_repeater_arrow"
+    },
+    {
+      "predicate": {"charged": 1, "firework": 1},
+      "model": "extrashiny:item/vanadium_repeater_firework"
+    }
+  ]
+}
