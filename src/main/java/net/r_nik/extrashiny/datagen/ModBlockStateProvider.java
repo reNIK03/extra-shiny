@@ -47,9 +47,9 @@ public class ModBlockStateProvider extends BlockStateProvider {
         );
 
 
-        stairsBlock(((StairBlock) ModBlocks.LABRADORITE_BRICK_STAIRS.get()), blockTexture(ModBlocks.LABRADORITE_BRICKS.get()));
-        slabBlock(((SlabBlock) ModBlocks.LABRADORITE_BRICK_SLAB.get()), blockTexture(ModBlocks.LABRADORITE_BRICKS.get()), blockTexture(ModBlocks.LABRADORITE_BRICKS.get()));
-        wallBlock(((WallBlock) ModBlocks.LABRADORITE_BRICK_WALL.get()), blockTexture(ModBlocks.LABRADORITE_BRICKS.get()));
+        stairsBlock(((StairBlock) ModBlocks.LABRADORITE_BRICK_STAIRS.get()), modLoc("block/labradorite_brick"));
+        slabBlock(((SlabBlock) ModBlocks.LABRADORITE_BRICK_SLAB.get()), modLoc("block/labradorite_brick"), modLoc("block/labradorite_brick"));
+        wallBlock(((WallBlock) ModBlocks.LABRADORITE_BRICK_WALL.get()), modLoc("block/labradorite_brick"));
 
 
 
@@ -79,15 +79,15 @@ public class ModBlockStateProvider extends BlockStateProvider {
         blockWithItem(ModBlocks.SPOTTED_BLACKSTONE);
 
         simpleBlockWithItem(ModBlocks.VANADIUM_BRICKS.get(), models().cubeAll("vanadium_bricks", modLoc("block/vanadium_bricks")));
-        stairsBlock(((StairBlock) ModBlocks.VANADIUM_BRICK_STAIRS.get()), blockTexture(ModBlocks.VANADIUM_BRICKS.get()));
-        slabBlock(((SlabBlock) ModBlocks.VANADIUM_BRICK_SLAB.get()), blockTexture(ModBlocks.VANADIUM_BRICKS.get()), blockTexture(ModBlocks.VANADIUM_BRICKS.get()));
-        wallBlock(((WallBlock) ModBlocks.VANADIUM_BRICK_WALL.get()), blockTexture(ModBlocks.VANADIUM_BRICKS.get()));
+        stairsBlock(((StairBlock) ModBlocks.VANADIUM_BRICK_STAIRS.get()), modLoc("block/vanadium_bricks"));
+        slabBlock(((SlabBlock) ModBlocks.VANADIUM_BRICK_SLAB.get()), modLoc("block/vanadium_bricks"), modLoc("block/vanadium_bricks"));
+        wallBlock(((WallBlock) ModBlocks.VANADIUM_BRICK_WALL.get()), modLoc("block/vanadium_bricks"));
         simpleBlockWithItem(ModBlocks.CHISELED_VANADIUM_BRICKS.get(), models().cubeAll("chiseled_vanadium_bricks", modLoc("block/chiseled_vanadium_bricks")));
 
         simpleBlockWithItem(ModBlocks.OSMIUM_BRICKS.get(), models().cubeAll("osmium_bricks", modLoc("block/osmium_bricks")));
-        stairsBlock(((StairBlock) ModBlocks.OSMIUM_BRICK_STAIRS.get()), blockTexture(ModBlocks.OSMIUM_BRICKS.get()));
-        slabBlock(((SlabBlock) ModBlocks.OSMIUM_BRICK_SLAB.get()), blockTexture(ModBlocks.OSMIUM_BRICKS.get()), blockTexture(ModBlocks.OSMIUM_BRICKS.get()));
-        wallBlock(((WallBlock) ModBlocks.OSMIUM_BRICK_WALL.get()), blockTexture(ModBlocks.OSMIUM_BRICKS.get()));
+        stairsBlock(((StairBlock) ModBlocks.OSMIUM_BRICK_STAIRS.get()), modLoc("block/osmium_bricks"));
+        slabBlock(((SlabBlock) ModBlocks.OSMIUM_BRICK_SLAB.get()), modLoc("block/osmium_bricks"), modLoc("block/osmium_bricks"));
+        wallBlock(((WallBlock) ModBlocks.OSMIUM_BRICK_WALL.get()), modLoc("block/osmium_bricks"));
         simpleBlockWithItem(ModBlocks.CHISELED_OSMIUM_BRICKS.get(), models().cubeAll("chiseled_osmium_bricks", modLoc("block/chiseled_osmium_bricks")));
 
         makeIngotBlock(ModBlocks.VANADIUM_INGOT_BLOCK.get(), "vanadium_ingot");
