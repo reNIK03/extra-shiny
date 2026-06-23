@@ -2,7 +2,6 @@ package net.r_nik.extrashiny.client.renderer;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
@@ -53,12 +52,11 @@ public class VanadiumGolemDecorLayer
             );
 
     private static ResourceLocation decor(String name) {
-        return new ResourceLocation(
+        return ResourceLocation.fromNamespaceAndPath(
                 ExtraShiny.MOD_ID,
                 "textures/entity/decor/" + name + ".png"
         );
     }
-
 
     public VanadiumGolemDecorLayer(
             RenderLayerParent<
@@ -86,6 +84,7 @@ public class VanadiumGolemDecorLayer
         ResourceLocation texture = DECOR_TEXTURES.get(golem.getDecor());
         if (texture == null) return;
 
+        // Use 0xFFFFFFFF (White) as the packedColor to replace the three 1.0F arguments
         renderColoredCutoutModel(
                 this.getParentModel(),
                 texture,
@@ -93,10 +92,7 @@ public class VanadiumGolemDecorLayer
                 buffer,
                 packedLight,
                 golem,
-                1.0F,
-                1.0F,
-                1.0F
+                0xFFFFFFFF
         );
     }
-
 }

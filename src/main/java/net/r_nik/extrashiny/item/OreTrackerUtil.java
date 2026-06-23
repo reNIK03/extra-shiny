@@ -1,29 +1,28 @@
 package net.r_nik.extrashiny.item;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class OreTrackerUtil {
 
     public static final int MAX_RADIUS = 80;
 
     public static int findNearestOreDistance(Level level, BlockPos origin, ItemStack tracker) {
-        if (!tracker.hasTag()) return -1;
+        if (!hasStoredItem(tracker)) return -1;
 
-        ItemStack stored = getStoredItem(tracker);
+        ItemStack stored = getStoredItem(tracker, level);
         if (stored.isEmpty()) return -1;
 
         TagKey<Block> oreTag = getOreTagForItem(stored);
         if (oreTag == null) return -1;
-
-        final int MAX_RADIUS = 80;
 
         int closest = Integer.MAX_VALUE;
 
@@ -51,29 +50,25 @@ public class OreTrackerUtil {
         return closest == Integer.MAX_VALUE ? -1 : closest;
     }
 
+    public static ItemStack getStoredItem(ItemStack tracker, Level level) {
+        CustomData customData = tracker.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
+        if (!customData.contains("StoredItem")) return ItemStack.EMPTY;
 
-    public static ItemStack getStoredItem(ItemStack tracker) {
-        if (!tracker.hasTag()) return ItemStack.EMPTY;
-
-        var tag = tracker.getTag();
-        if (!tag.contains("StoredItem")) return ItemStack.EMPTY;
-
-        return ItemStack.of(tag.getCompound("StoredItem"));
+        return ItemStack.parseOptional(level.registryAccess(), customData.copyTag().getCompound("StoredItem"));
     }
 
     public static boolean hasStoredItem(ItemStack tracker) {
-        return tracker.hasTag()
-                && tracker.getTag().contains("StoredItem")
-                && !tracker.getTag().getCompound("StoredItem").isEmpty();
+        CustomData customData = tracker.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
+        return customData.contains("StoredItem");
     }
-
 
     public static TagKey<Block> getOreTagForItem(ItemStack sample) {
 
-        for (TagKey<net.minecraft.world.item.Item> tag : sample.getTags().toList()) {
+        for (TagKey<Item> tag : sample.getTags().toList()) {
             ResourceLocation id = tag.location();
 
-            if (id.getNamespace().equals("forge")) {
+            String namespace = id.getNamespace();
+            if (namespace.equals("c") || namespace.equals("forge")) {
 
                 String path = id.getPath();
 
@@ -85,7 +80,7 @@ public class OreTrackerUtil {
 
                     return TagKey.create(
                             Registries.BLOCK,
-                            new ResourceLocation("forge", "ores/" + material)
+                            ResourceLocation.fromNamespaceAndPath(namespace, "ores/" + material)
                     );
                 }
             }

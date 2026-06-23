@@ -1,11 +1,11 @@
 package net.r_nik.extrashiny.datagen.loot;
 
 import net.minecraft.advancements.critereon.StatePropertiesPredicate;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.data.loot.BlockLootSubProvider;
-import net.minecraft.world.flag.FeatureFlagSet;
 import net.minecraft.world.flag.FeatureFlags;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.storage.loot.LootPool;
@@ -16,7 +16,7 @@ import net.minecraft.world.level.storage.loot.functions.SetItemCountFunction;
 import net.minecraft.world.level.storage.loot.predicates.LootItemBlockStatePropertyCondition;
 import net.minecraft.world.level.storage.loot.providers.number.ConstantValue;
 import net.minecraft.world.level.storage.loot.providers.number.UniformGenerator;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.r_nik.extrashiny.block.IngotBlock;
 import net.r_nik.extrashiny.block.IngotLayer;
 import net.r_nik.extrashiny.block.ModBlocks;
@@ -25,8 +25,8 @@ import net.r_nik.extrashiny.item.ModItems;
 import java.util.Set;
 
 public class ModBlockLootTables extends BlockLootSubProvider {
-    public ModBlockLootTables() {
-        super(Set.of(), FeatureFlags.REGISTRY.allFlags());
+    public ModBlockLootTables(HolderLookup.Provider provider) {
+        super(Set.of(), FeatureFlags.REGISTRY.allFlags(), provider);
     }
 
     @Override
@@ -97,7 +97,7 @@ public class ModBlockLootTables extends BlockLootSubProvider {
                 this.applyExplosionDecay(pBlock,
                         LootItem.lootTableItem(item)
                                 .apply(SetItemCountFunction.setCount(UniformGenerator.between(1,1)))
-                                .apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE))));
+                                .apply(ApplyBonusCount.addOreBonusCount(registries.lookup(Registries.ENCHANTMENT).get().getOrThrow(Enchantments.FORTUNE)))));
     }
 
     protected LootTable.Builder createSpottedBlackstoneDrop(Block block) {
@@ -105,9 +105,8 @@ public class ModBlockLootTables extends BlockLootSubProvider {
                 this.applyExplosionDecay(block,
                         LootItem.lootTableItem(ModItems.OSMIUM_NUGGET.get())
                                 .apply(SetItemCountFunction.setCount(UniformGenerator.between(2.0F, 6.0F)))
-                                .apply(ApplyBonusCount.addOreBonusCount(Enchantments.BLOCK_FORTUNE))
-                )
-        );
+                                .apply(ApplyBonusCount.addOreBonusCount(registries.lookup(Registries.ENCHANTMENT).get().getOrThrow(Enchantments.FORTUNE)))));
+
     }
 
     protected LootTable.Builder createIngotBlockDrop(Block block, Item drop) {
@@ -132,10 +131,9 @@ public class ModBlockLootTables extends BlockLootSubProvider {
 
     @Override
     protected Iterable<Block> getKnownBlocks() {
-        return ModBlocks.BLOCKS.getEntries()
-                .stream()
-                .map(RegistryObject::get)
-                .toList();
+        return ModBlocks.BLOCKS.getEntries().stream()
+                .map(DeferredHolder::get)
+                .collect(java.util.stream.Collectors.toList());
     }
 
 }

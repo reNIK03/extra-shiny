@@ -2,17 +2,22 @@ package net.r_nik.extrashiny.client;
 
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.client.IItemDecorator;
+import net.minecraft.world.item.component.CustomData;
+import net.neoforged.neoforge.client.IItemDecorator;
 
 public class MemoryAlloyDecorator implements IItemDecorator {
 
     @Override
     public boolean render(GuiGraphics guiGraphics, Font font, ItemStack stack, int xOffset, int yOffset) {
-        if (!stack.hasTag() || !stack.getTag().contains("MemoryDurability")) return false;
+        CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
 
-        int memoryDura = stack.getTag().getInt("MemoryDurability");
-        int maxMemoryDura = stack.getTag().getInt("MaxMemoryDurability");
+        if (!tag.contains("MemoryDurability")) return false;
+
+        int memoryDura = tag.getInt("MemoryDurability");
+        int maxMemoryDura = tag.getInt("MaxMemoryDurability");
 
         if (memoryDura <= 0) return false;
         int width = Math.round(13.0F - (float)(maxMemoryDura - memoryDura) * 13.0F / (float)maxMemoryDura);

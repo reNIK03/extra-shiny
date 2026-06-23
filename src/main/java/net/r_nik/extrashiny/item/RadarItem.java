@@ -1,15 +1,18 @@
 package net.r_nik.extrashiny.item;
 
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.MobCategory;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.network.chat.Component;
 
 public class RadarItem extends Item {
 
@@ -21,7 +24,6 @@ public class RadarItem extends Item {
     public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
         return slotChanged || oldStack.getItem() != newStack.getItem();
     }
-
 
     @Override
     public void inventoryTick(ItemStack stack, Level level, Entity entity, int slot, boolean isSelected) {
@@ -45,8 +47,17 @@ public class RadarItem extends Item {
             int count10 = level.getEntities(player, box10,
                     e -> e.getType().getCategory() == MobCategory.MONSTER).size();
 
-            stack.getOrCreateTag().putInt("HostilesNearby20", count20);
-            stack.getOrCreateTag().putInt("HostilesNearby10", count10);
+            CustomData customData = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
+            CompoundTag tag = customData.copyTag();
+
+            int oldCount20 = tag.contains("HostilesNearby20") ? tag.getInt("HostilesNearby20") : -1;
+            int oldCount10 = tag.contains("HostilesNearby10") ? tag.getInt("HostilesNearby10") : -1;
+
+            if (count20 != oldCount20 || count10 != oldCount10) {
+                tag.putInt("HostilesNearby20", count20);
+                tag.putInt("HostilesNearby10", count10);
+                stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
+            }
         }
     }
 
@@ -55,7 +66,8 @@ public class RadarItem extends Item {
         ItemStack stack = player.getItemInHand(hand);
 
         if (!level.isClientSide) {
-            int count = stack.getOrCreateTag().getInt("HostilesNearby20");
+            CustomData customData = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
+            int count = customData.contains("HostilesNearby20") ? customData.copyTag().getInt("HostilesNearby20") : 0;
 
             player.displayClientMessage(
                     Component.literal("Hostile mobs nearby: " + count),
@@ -63,6 +75,6 @@ public class RadarItem extends Item {
             );
         }
 
-        return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+        return InteractionResultHolder.success(stack);
     }
 }

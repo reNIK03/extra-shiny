@@ -1,6 +1,7 @@
 package net.r_nik.extrashiny.item;
 
-import net.minecraft.core.particles.VibrationParticleOption;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
@@ -12,12 +13,13 @@ import net.minecraft.world.entity.MobCategory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.gameevent.BlockPositionSource;
 import net.minecraft.world.level.gameevent.EntityPositionSource;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import net.r_nik.extrashiny.util.RadarArrivalGlow;
+import net.minecraft.core.particles.VibrationParticleOption;
 
 import java.util.Comparator;
 import java.util.List;
@@ -46,8 +48,17 @@ public class RecalibratedRadarItem extends Item {
         int count20 = countHostiles(level, player, R20);
         int count10 = countHostiles(level, player, R10);
 
-        stack.getOrCreateTag().putInt("HostilesNearby20", count20);
-        stack.getOrCreateTag().putInt("HostilesNearby10", count10);
+        CustomData customData = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
+        CompoundTag tag = customData.copyTag();
+
+        int oldCount20 = tag.contains("HostilesNearby20") ? tag.getInt("HostilesNearby20") : -1;
+        int oldCount10 = tag.contains("HostilesNearby10") ? tag.getInt("HostilesNearby10") : -1;
+
+        if (count20 != oldCount20 || count10 != oldCount10) {
+            tag.putInt("HostilesNearby20", count20);
+            tag.putInt("HostilesNearby10", count10);
+            stack.set(DataComponents.CUSTOM_DATA, CustomData.of(tag));
+        }
 
         boolean inHotbar = slot >= 0 && slot < 9;
         boolean inOffhand = player.getOffhandItem() == stack;
@@ -56,7 +67,7 @@ public class RecalibratedRadarItem extends Item {
         if (inMainhand || inOffhand || isSelected) {
             player.displayClientMessage(
                     Component.literal("Hostile mobs nearby: " + count20),
-                    true // action bar
+                    true
             );
         }
     }
@@ -66,7 +77,8 @@ public class RecalibratedRadarItem extends Item {
         ItemStack stack = player.getItemInHand(hand);
 
         if (!level.isClientSide) {
-            int count20 = stack.getOrCreateTag().getInt("HostilesNearby20");
+            CustomData customData = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY);
+            int count20 = customData.contains("HostilesNearby20") ? customData.copyTag().getInt("HostilesNearby20") : 0;
 
             if (count20 <= 0) {
                 return InteractionResultHolder.fail(stack);
@@ -81,7 +93,7 @@ public class RecalibratedRadarItem extends Item {
             }
         }
 
-        return InteractionResultHolder.sidedSuccess(stack, level.isClientSide());
+        return InteractionResultHolder.success(stack);
     }
 
     private static int countHostiles(Level level, Player player, int radius) {
@@ -130,7 +142,6 @@ public class RecalibratedRadarItem extends Item {
             );
 
             RadarArrivalGlow.queue(target, travelTime);
-
         }
     }
 }

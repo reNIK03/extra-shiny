@@ -1,18 +1,19 @@
 package net.r_nik.extrashiny.particle;
 
-import com.mojang.brigadier.StringReader;
-import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.util.Mth;
 import org.joml.Vector3f;
 
 public class AuroralDustColorTransitionOptions implements ParticleOptions {
 
-    public static final Codec<AuroralDustColorTransitionOptions> CODEC = RecordCodecBuilder.create(inst -> inst.group(
+    public static final MapCodec<AuroralDustColorTransitionOptions> CODEC = RecordCodecBuilder.mapCodec(inst -> inst.group(
             Codec.FLOAT.fieldOf("from_r").forGetter(o -> o.fromColor.x),
             Codec.FLOAT.fieldOf("from_g").forGetter(o -> o.fromColor.y),
             Codec.FLOAT.fieldOf("from_b").forGetter(o -> o.fromColor.z),
@@ -24,45 +25,12 @@ public class AuroralDustColorTransitionOptions implements ParticleOptions {
             new AuroralDustColorTransitionOptions(new Vector3f(fr, fg, fb), new Vector3f(tr, tg, tb), s)
     ));
 
-    public static final Deserializer<AuroralDustColorTransitionOptions> DESERIALIZER =
-            new Deserializer<>() {
-                @Override
-                public AuroralDustColorTransitionOptions fromCommand(ParticleType<AuroralDustColorTransitionOptions> type, StringReader reader)
-                        throws CommandSyntaxException {
-
-                    reader.expect(' ');
-                    float fr = reader.readFloat(); reader.expect(' ');
-                    float fg = reader.readFloat(); reader.expect(' ');
-                    float fb = reader.readFloat(); reader.expect(' ');
-                    float tr = reader.readFloat(); reader.expect(' ');
-                    float tg = reader.readFloat(); reader.expect(' ');
-                    float tb = reader.readFloat(); reader.expect(' ');
-                    float scale = reader.readFloat();
-
-                    return new AuroralDustColorTransitionOptions(
-                            new Vector3f(fr, fg, fb),
-                            new Vector3f(tr, tg, tb),
-                            scale
-                    );
-                }
-
-                @Override
-                public AuroralDustColorTransitionOptions fromNetwork(ParticleType<AuroralDustColorTransitionOptions> type, FriendlyByteBuf buf) {
-                    float fr = buf.readFloat();
-                    float fg = buf.readFloat();
-                    float fb = buf.readFloat();
-                    float tr = buf.readFloat();
-                    float tg = buf.readFloat();
-                    float tb = buf.readFloat();
-                    float scale = buf.readFloat();
-
-                    return new AuroralDustColorTransitionOptions(
-                            new Vector3f(fr, fg, fb),
-                            new Vector3f(tr, tg, tb),
-                            scale
-                    );
-                }
-            };
+    public static final StreamCodec<ByteBuf, AuroralDustColorTransitionOptions> STREAM_CODEC = StreamCodec.composite(
+            ByteBufCodecs.VECTOR3F, o -> o.fromColor,
+            ByteBufCodecs.VECTOR3F, o -> o.toColor,
+            ByteBufCodecs.FLOAT, o -> o.scale,
+            AuroralDustColorTransitionOptions::new
+    );
 
     private final Vector3f fromColor;
     private final Vector3f toColor;
@@ -77,27 +45,6 @@ public class AuroralDustColorTransitionOptions implements ParticleOptions {
     @Override
     public ParticleType<?> getType() {
         return ModParticleTypes.AURORAL_DUST.get();
-    }
-
-    @Override
-    public void writeToNetwork(FriendlyByteBuf buf) {
-        buf.writeFloat(fromColor.x);
-        buf.writeFloat(fromColor.y);
-        buf.writeFloat(fromColor.z);
-        buf.writeFloat(toColor.x);
-        buf.writeFloat(toColor.y);
-        buf.writeFloat(toColor.z);
-        buf.writeFloat(scale);
-    }
-
-    @Override
-    public String writeToString() {
-        return String.format(java.util.Locale.ROOT,
-                "%f %f %f %f %f %f %f",
-                fromColor.x, fromColor.y, fromColor.z,
-                toColor.x, toColor.y, toColor.z,
-                scale
-        );
     }
 
     public Vector3f getFromColor() { return fromColor; }

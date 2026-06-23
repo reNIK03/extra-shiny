@@ -1,7 +1,5 @@
 package net.r_nik.extrashiny.entity;
 
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.damagesource.DamageSource;
@@ -15,8 +13,6 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.NetworkHooks;
-import net.minecraftforge.network.PlayMessages;
 import net.r_nik.extrashiny.item.ModItems;
 import net.r_nik.extrashiny.particle.AuroralDustColorTransitionOptions;
 import net.r_nik.extrashiny.particle.ModParticleTypes;
@@ -36,16 +32,20 @@ public class AuroralArrowEntity extends AbstractArrow {
     }
 
     public AuroralArrowEntity(Level level, double x, double y, double z) {
-        super(ModEntities.AURORAL_ARROW.get(), x, y, z, level);
+        super(ModEntities.AURORAL_ARROW.get(), level);
+        this.setPos(x, y, z);
     }
 
-    public AuroralArrowEntity(PlayMessages.SpawnEntity spawnEntity, Level level) {
-        this(ModEntities.AURORAL_ARROW.get(), level);
-    }
-
+    // FIXED CONSTRUCTOR: 1.21.1 requires the shooter as the second argument
     public AuroralArrowEntity(Level level, LivingEntity shooter) {
-        super(ModEntities.AURORAL_ARROW.get(), shooter, level);
+        super(ModEntities.AURORAL_ARROW.get(), shooter, level, new ItemStack(ModItems.AURORAL_ARROW.get()), null);
+        this.setPos(shooter.getX(), shooter.getEyeY() - 0.1, shooter.getZ());
         this.setBaseDamage(this.getBaseDamage() * 1.5D);
+    }
+
+    @Override
+    protected ItemStack getDefaultPickupItem() {
+        return new ItemStack(ModItems.AURORAL_ARROW.get());
     }
 
     @Override
@@ -189,6 +189,9 @@ public class AuroralArrowEntity extends AbstractArrow {
         }
     }
 
+
+
+
     @Override
     protected void onHitBlock(BlockHitResult hitResult) {
         super.onHitBlock(hitResult);
@@ -198,15 +201,5 @@ public class AuroralArrowEntity extends AbstractArrow {
     @Override
     protected SoundEvent getDefaultHitGroundSoundEvent() {
         return super.getDefaultHitGroundSoundEvent();
-    }
-
-    @Override
-    protected ItemStack getPickupItem() {
-        return new ItemStack(ModItems.AURORAL_ARROW.get());
-    }
-
-    @Override
-    public Packet<ClientGamePacketListener> getAddEntityPacket() {
-        return NetworkHooks.getEntitySpawningPacket(this);
     }
 }

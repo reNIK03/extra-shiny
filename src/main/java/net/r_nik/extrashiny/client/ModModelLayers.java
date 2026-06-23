@@ -8,13 +8,13 @@ public class ModModelLayers {
 
     public static final ModelLayerLocation VANADIUM_GOLEM_MAIN =
             new ModelLayerLocation(
-                    new ResourceLocation(ExtraShiny.MOD_ID, "vanadium_golem"),
+                    ResourceLocation.fromNamespaceAndPath(ExtraShiny.MOD_ID, "vanadium_golem"),
                     "main"
             );
 
     public static final ModelLayerLocation ENFORCER_MAIN =
             new ModelLayerLocation(
-                    new ResourceLocation(ExtraShiny.MOD_ID, "enforcer"),
+                    ResourceLocation.fromNamespaceAndPath(ExtraShiny.MOD_ID, "enforcer"),
                     "main"
             );
 }

@@ -35,6 +35,7 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
@@ -42,7 +43,7 @@ import net.minecraft.world.level.block.FlowerBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.r_nik.extrashiny.compat.ModCompat;
 import net.r_nik.extrashiny.entity.ai.*;
 import net.r_nik.extrashiny.item.ModItems;
@@ -79,11 +80,9 @@ public class VanadiumGolemEntity extends AbstractGolem {
     private static final int HEAVY_END_TICK = 50;
 
     private static final Set<ResourceLocation> BLACKLISTED_FLOWERS = Set.of(
-            new ResourceLocation("minecraft", "torchflower"),
-            new ResourceLocation("minecraft", "wither_rose"),
-            new ResourceLocation("collectorsreap", "damselflower"),
-            new ResourceLocation("collectorsreap", "moontear"),
-            new ResourceLocation("collectorsreap", "skull_lily")
+            ResourceLocation.fromNamespaceAndPath("minecraft", "torchflower"),
+            ResourceLocation.fromNamespaceAndPath("minecraft", "wither_rose")
+            // be patient and collectors reap port will happen
     );
 
     private static final Map<Item, DecorType> CARPET_TO_DECOR = Map.ofEntries(
@@ -160,7 +159,9 @@ public class VanadiumGolemEntity extends AbstractGolem {
     // ==========================================
     public VanadiumGolemEntity(EntityType<? extends VanadiumGolemEntity> type, Level level) {
         super(type, level);
-        this.setMaxUpStep(1.0F);
+        this.maxUpStep = 1.0F;
+        // Set the dimensions here in the constructor
+        this.dimensions = EntityDimensions.fixed(1.4F, 3.7F);
     }
 
     public static AttributeSupplier.Builder createAttributes() {
@@ -190,13 +191,13 @@ public class VanadiumGolemEntity extends AbstractGolem {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(ATTACKING, false);
-        this.entityData.define(ATTACK_TYPE, AttackType.NONE.ordinal());
-        this.entityData.define(DECOR, DecorType.NONE.ordinal());
-        this.entityData.define(PLAYER_CREATED, false);
-        this.entityData.define(HOSTILE_TO_PLAYER, false);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+        builder.define(ATTACKING, false);
+        builder.define(ATTACK_TYPE, AttackType.NONE.ordinal());
+        builder.define(DECOR, DecorType.NONE.ordinal());
+        builder.define(PLAYER_CREATED, false);
+        builder.define(HOSTILE_TO_PLAYER, false);
     }
 
     // ==========================================
@@ -240,7 +241,7 @@ public class VanadiumGolemEntity extends AbstractGolem {
                         for (int i = 0; i < 5; i++) {
                             this.level().playSound(null, this.blockPosition(), breakSound, SoundSource.HOSTILE, 1.3F, 0.7F + (this.random.nextFloat() * 0.15F));
                         }
-                        this.level().playSound(null, this.blockPosition(), SoundEvents.GENERIC_EXPLODE, SoundSource.HOSTILE, 0.8F, 0.6F);
+                        this.level().playSound(null, this.blockPosition(), SoundEvents.GENERIC_EXPLODE.value(), SoundSource.HOSTILE, 0.8F, 0.6F);
                     }
                     if (attackTicks == HEAVY_END_TICK) {
                         this.playSound(ModSounds.VGOLEM_ATK_END.get(), 1.0F, 1.0F);
@@ -415,8 +416,8 @@ public class VanadiumGolemEntity extends AbstractGolem {
 
         boolean hit = target.hurt(this.damageSources().mobAttack(this), finalDamage);
 
-        if (hit) {
-            this.doEnchantDamageEffects(this, target);
+        if (hit && this.level() instanceof ServerLevel serverLevel) {
+            EnchantmentHelper.doPostAttackEffects(serverLevel, target, this.damageSources().mobAttack(this));
         }
         return hit;
     }
@@ -612,7 +613,9 @@ public class VanadiumGolemEntity extends AbstractGolem {
                 this.spawnAtLocation(getCarpetFromDecor());
                 this.setDecor(DecorType.NONE);
                 this.playSound(SoundEvents.WOOL_BREAK, 1.0F, 1.0F);
-                stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(hand));
+
+                // Using EquipmentSlot.MAINHAND
+                stack.hurtAndBreak(1, player, (p) -> p.broadcastBreakEvent(EquipmentSlot.MAINHAND));
             }
             return InteractionResult.sidedSuccess(this.level().isClientSide);
         }
@@ -651,7 +654,7 @@ public class VanadiumGolemEntity extends AbstractGolem {
         if (stack.is(Items.BLACK_CARPET)) return DecorType.BLACK;
 
         if (ModCompat.DYE_DEPOT_LOADED) {
-            ResourceLocation id = ForgeRegistries.ITEMS.getKey(stack.getItem());
+            ResourceLocation id = BuiltInRegistries.ITEM.getKey(stack.getItem());
             if (id == null || !id.getNamespace().equals("dye_depot")) return null;
 
             return switch (id.getPath()) {
@@ -684,7 +687,7 @@ public class VanadiumGolemEntity extends AbstractGolem {
             }
         }
         if (ModCompat.DYE_DEPOT_LOADED) {
-            return ForgeRegistries.ITEMS.getValue(new ResourceLocation("dye_depot", this.getDecor().name().toLowerCase() + "_carpet"));
+            return BuiltInRegistries.ITEM.get(ResourceLocation.fromNamespaceAndPath("dye_depot", this.getDecor().name().toLowerCase() + "_carpet"));
         }
         return Items.AIR;
     }
@@ -735,10 +738,6 @@ public class VanadiumGolemEntity extends AbstractGolem {
         return air;
     }
 
-    @Override
-    public boolean canBreatheUnderwater() {
-        return true;
-    }
 
     @Override
     public boolean causeFallDamage(float fallDistance, float multiplier, DamageSource source) {
@@ -767,10 +766,7 @@ public class VanadiumGolemEntity extends AbstractGolem {
         return 1.0F;
     }
 
-    @Override
-    public EntityDimensions getDimensions(Pose pose) {
-        return EntityDimensions.fixed(1.4F, 3.7F);
-    }
+
 
     @Override
     public boolean removeWhenFarAway(double distance) {
@@ -964,10 +960,8 @@ public class VanadiumGolemEntity extends AbstractGolem {
     }
 
     @Override
-    protected void dropAllDeathLoot(DamageSource source) {
-        super.dropAllDeathLoot(source);
-
-        if (this.level().isClientSide) return;
+    protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
+        super.dropCustomDeathLoot(level, source, recentlyHit);
 
         int nuggets = 4 + this.random.nextInt(5);
         this.spawnAtLocation(new ItemStack(ModItems.VANADIUM_NUGGET.get(), nuggets));

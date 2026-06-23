@@ -5,6 +5,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.CookingBookCategory;
 import net.minecraft.world.level.block.Blocks;
 import net.r_nik.extrashiny.ExtraShiny;
 import net.r_nik.extrashiny.block.ModBlocks;
@@ -14,12 +15,13 @@ import net.minecraft.world.item.crafting.AbstractCookingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
-import net.minecraftforge.common.crafting.conditions.IConditionBuilder;
+import net.minecraft.core.HolderLookup;
+import java.util.concurrent.CompletableFuture;
 
 import java.util.List;
 import java.util.function.Consumer;
 
-public class ModRecipeProvider extends RecipeProvider implements IConditionBuilder {
+public class ModRecipeProvider extends RecipeProvider {
     private static final List<ItemLike> VANADIUM_SMELTABLES =
             List.of(ModItems.RAW_VANADIUM.get(),
                     ModBlocks.VANADIUM_ORE.get(), ModBlocks.DEEPSLATE_VANADIUM_ORE.get());
@@ -35,12 +37,12 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
             ModBlocks.DEEPSLATE_LABRADORITE_ORE.get()
     );
 
-    public ModRecipeProvider(PackOutput pOutput) {
-        super(pOutput);
+    public ModRecipeProvider(PackOutput pOutput, CompletableFuture<HolderLookup.Provider> registries) {
+        super(pOutput, registries);
     }
 
     @Override
-    protected void buildRecipes(Consumer<FinishedRecipe> pWriter) {
+    protected void buildRecipes(RecipeOutput pWriter) {
         buildVanadiumRecipes(pWriter);
         buildOsmiumRecipes(pWriter);
         buildDamaskRecipes(pWriter);
@@ -50,7 +52,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
         buildTemplatesAndTrims(pWriter);
     }
 
-    private void buildVanadiumRecipes(Consumer<FinishedRecipe> pWriter) {
+    private void buildVanadiumRecipes(RecipeOutput pWriter) {
         oreSmelting(pWriter, VANADIUM_SMELTABLES, RecipeCategory.MISC, ModItems.VANADIUM_INGOT.get(), 0.3f, 200, "vanadium_ingot");
         oreBlasting(pWriter, VANADIUM_SMELTABLES, RecipeCategory.MISC, ModItems.VANADIUM_INGOT.get(), 0.3f, 100, "vanadium_ingot");
 
@@ -148,7 +150,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .unlockedBy(getHasName(ModBlocks.VANADIUM_BRICKS.get()), has(ModBlocks.VANADIUM_BRICKS.get())).save(pWriter, ExtraShiny.MOD_ID + ":vanadium_bricks_to_chiseled_stonecutter");
     }
 
-    private void buildOsmiumRecipes(Consumer<FinishedRecipe> pWriter) {
+    private void buildOsmiumRecipes(RecipeOutput pWriter) {
         oreSmelting(pWriter, OSMIUM_SMELTABLES, RecipeCategory.MISC, ModItems.OSMIUM_INGOT.get(), 0.7f, 200, "osmium_ingot");
         oreBlasting(pWriter, OSMIUM_SMELTABLES, RecipeCategory.MISC, ModItems.OSMIUM_INGOT.get(), 0.7f, 100, "osmium_ingot");
 
@@ -285,7 +287,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .unlockedBy(getHasName(ModBlocks.OSMIUM_BRICKS.get()), has(ModBlocks.OSMIUM_BRICKS.get())).save(pWriter, ExtraShiny.MOD_ID + ":osmium_bricks_to_chiseled_stonecutter");
     }
 
-    private void buildDamaskRecipes(Consumer<FinishedRecipe> pWriter) {
+    private void buildDamaskRecipes(RecipeOutput pWriter) {
         smithingDamask(pWriter, Items.DIAMOND_SWORD, ModItems.DAMASK_INGOT.get(), ModItems.DAMASK_SWORD.get());
         smithingDamask(pWriter, Items.DIAMOND_PICKAXE, ModItems.DAMASK_INGOT.get(), ModItems.DAMASK_PICKAXE.get());
         smithingDamask(pWriter, Items.DIAMOND_AXE, ModItems.DAMASK_INGOT.get(), ModItems.DAMASK_AXE.get());
@@ -325,7 +327,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .save(pWriter, ExtraShiny.MOD_ID + ":damask_ingot_from_nuggets");
     }
 
-    private void buildCimmerianRecipes(Consumer<FinishedRecipe> pWriter) {
+    private void buildCimmerianRecipes(RecipeOutput pWriter) {
         ShapedRecipeBuilder.shaped(RecipeCategory.COMBAT, ModItems.CIMMERIAN_HELMET.get())
                 .pattern("LLL").pattern("L L")
                 .define('L', ModItems.ANCIENT_LATTICE.get())
@@ -361,7 +363,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .save(pWriter, ExtraShiny.MOD_ID + ":ancient_lattice_from_cimmerian_block");
     }
 
-    private void buildLabradoriteRecipes(Consumer<FinishedRecipe> pWriter) {
+    private void buildLabradoriteRecipes(RecipeOutput pWriter) {
         oreSmelting(pWriter, LABRADORITE_SMELTABLES, RecipeCategory.MISC, ModItems.LABRADORITE.get(), 0.5f, 200, "labradorite");
         oreBlasting(pWriter, LABRADORITE_SMELTABLES, RecipeCategory.MISC, ModItems.LABRADORITE.get(), 0.5f, 100, "labradorite");
 
@@ -423,7 +425,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .unlockedBy(getHasName(ModItems.LABRADORITE.get()), has(ModItems.LABRADORITE.get())).save(pWriter);
     }
 
-    private void buildMiscRecipes(Consumer<FinishedRecipe> pWriter) {
+    private void buildMiscRecipes(RecipeOutput pWriter) {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.RADAR.get())
                 .pattern(" X ").pattern("XRX").pattern(" X ")
                 .define('X', ModItems.VANADIUM_INGOT.get()).define('R', Items.REDSTONE)
@@ -454,7 +456,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .unlockedBy(getHasName(ModItems.OSMIUM_INGOT.get()), has(ModItems.OSMIUM_INGOT.get())).save(pWriter);
     }
 
-    private void buildTemplatesAndTrims(Consumer<FinishedRecipe> pWriter) {
+    private void buildTemplatesAndTrims(RecipeOutput pWriter) {
         ShapedRecipeBuilder.shaped(RecipeCategory.MISC, ModItems.VANADIUM_UPGRADE_SMITHING_TEMPLATE.get(), 2)
                 .pattern("#S#").pattern("#C#").pattern("###")
                 .define('#', ModItems.VANADIUM_INGOT.get())
@@ -471,27 +473,40 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                         RecipeCategory.MISC
                 )
                 .unlocks("has_memory_template", has(ModItems.MEMORY_ARMOR_TRIM_SMITHING_TEMPLATE.get()))
-                .save(pWriter, new ResourceLocation(ExtraShiny.MOD_ID, "memory_trim"));
+                .save(pWriter, ResourceLocation.fromNamespaceAndPath(ExtraShiny.MOD_ID, "memory_trim"));
+
     }
 
-    protected static void oreSmelting(Consumer<FinishedRecipe> pFinishedRecipeConsumer, List<ItemLike> pIngredients, RecipeCategory pCategory, ItemLike pResult, float pExperience, int pCookingTIme, String pGroup) {
+    protected static void oreSmelting(RecipeOutput pFinishedRecipeConsumer, List<ItemLike> pIngredients, RecipeCategory pCategory, ItemLike pResult, float pExperience, int pCookingTIme, String pGroup) {
         oreCooking(pFinishedRecipeConsumer, RecipeSerializer.SMELTING_RECIPE, pIngredients, pCategory, pResult, pExperience, pCookingTIme, pGroup, "_from_smelting");
     }
 
-    protected static void oreBlasting(Consumer<FinishedRecipe> pFinishedRecipeConsumer, List<ItemLike> pIngredients, RecipeCategory pCategory, ItemLike pResult, float pExperience, int pCookingTime, String pGroup) {
+    protected static void oreBlasting(RecipeOutput pFinishedRecipeConsumer, List<ItemLike> pIngredients, RecipeCategory pCategory, ItemLike pResult, float pExperience, int pCookingTime, String pGroup) {
         oreCooking(pFinishedRecipeConsumer, RecipeSerializer.BLASTING_RECIPE, pIngredients, pCategory, pResult, pExperience, pCookingTime, pGroup, "_from_blasting");
     }
 
-    protected static void oreCooking(Consumer<FinishedRecipe> pFinishedRecipeConsumer, RecipeSerializer<? extends AbstractCookingRecipe> pCookingSerializer, List<ItemLike> pIngredients, RecipeCategory pCategory, ItemLike pResult, float pExperience, int pCookingTime, String pGroup, String pRecipeName) {
-        for(ItemLike itemlike : pIngredients) {
-            SimpleCookingRecipeBuilder.generic(Ingredient.of(itemlike), pCategory, pResult,
-                            pExperience, pCookingTime, pCookingSerializer)
-                    .group(pGroup).unlockedBy(getHasName(itemlike), has(itemlike))
-                    .save(pFinishedRecipeConsumer,  ExtraShiny.MOD_ID + ":" + getItemName(pResult) + pRecipeName + "_" + getItemName(itemlike));
+    protected static void oreCooking(RecipeOutput pFinishedRecipeConsumer,
+                                     RecipeSerializer<? extends AbstractCookingRecipe> pCookingSerializer,
+                                     List<ItemLike> pIngredients,
+                                     RecipeCategory pCategory,
+                                     ItemLike pResult,
+                                     float pExperience,
+                                     int pCookingTime,
+                                     String pGroup,
+                                     String pRecipeName) {
+        for (ItemLike itemlike : pIngredients) {
+            SimpleCookingRecipeBuilder builder = (pCookingSerializer == RecipeSerializer.BLASTING_RECIPE)
+                    ? SimpleCookingRecipeBuilder.blasting(Ingredient.of(itemlike), pCategory, pResult, pExperience, pCookingTime)
+                    : SimpleCookingRecipeBuilder.smelting(Ingredient.of(itemlike), pCategory, pResult, pExperience, pCookingTime);
+
+            builder.group(pGroup)
+                    .unlockedBy(getHasName(itemlike), has(itemlike))
+                    .save(pFinishedRecipeConsumer,
+                            ExtraShiny.MOD_ID + ":" + getItemName(pResult) + pRecipeName + "_" + getItemName(itemlike));
         }
     }
 
-    private void smithingDamask(Consumer<FinishedRecipe> writer, Item base, Item addition, Item result) {
+    private void smithingDamask(RecipeOutput writer, Item base, Item addition, Item result) {
         SmithingTransformRecipeBuilder.smithing(
                         Ingredient.of(Items.NETHERITE_UPGRADE_SMITHING_TEMPLATE),
                         Ingredient.of(base),
@@ -503,7 +518,7 @@ public class ModRecipeProvider extends RecipeProvider implements IConditionBuild
                 .save(writer, ExtraShiny.MOD_ID + ":damask_upgrade_" + getItemName(result));
     }
 
-    private void smithingVanadium(Consumer<FinishedRecipe> writer, Item base, Item addition, Item result) {
+    private void smithingVanadium(RecipeOutput writer, Item base, Item addition, Item result) {
         SmithingTransformRecipeBuilder.smithing(
                         Ingredient.of(ModItems.VANADIUM_UPGRADE_SMITHING_TEMPLATE.get()),
                         Ingredient.of(base),

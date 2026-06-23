@@ -1,5 +1,6 @@
 package net.r_nik.extrashiny.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.Entity;
@@ -16,6 +17,8 @@ import net.minecraft.world.level.block.state.properties.RailShape;
 import net.minecraft.world.phys.Vec3;
 
 public class LeapRailBlock extends BaseRailBlock {
+
+    public static final MapCodec<LeapRailBlock> CODEC = simpleCodec(LeapRailBlock::new);
 
     public static final EnumProperty<RailShape> SHAPE = BlockStateProperties.RAIL_SHAPE_STRAIGHT;
     public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
@@ -34,6 +37,11 @@ public class LeapRailBlock extends BaseRailBlock {
                         .setValue(POWERED, false)
                         .setValue(WATERLOGGED, false)
         );
+    }
+
+    @Override
+    protected MapCodec<? extends BaseRailBlock> codec() {
+        return CODEC;
     }
 
     @Override

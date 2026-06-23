@@ -1,7 +1,8 @@
 package net.r_nik.extrashiny.item;
 
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
+import net.minecraft.core.Holder;
+import net.minecraft.core.component.DataComponents;
+import net.minecraft.core.registries.Registries;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
@@ -12,9 +13,13 @@ import net.minecraft.world.item.CrossbowItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.component.ChargedProjectiles;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class VanadiumRepeaterItem extends CrossbowItem {
 
@@ -31,31 +36,35 @@ public class VanadiumRepeaterItem extends CrossbowItem {
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
-        return getRepeaterChargeTime(stack) + 3;
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
+        return getRepeaterChargeTime(stack, entity.level()) + 3;
     }
 
-    public int getRepeaterChargeTime(ItemStack stack) {
-        int quick = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.QUICK_CHARGE, stack);
+    public int getRepeaterChargeTime(ItemStack stack, Level level) {
+        var registry = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+        Holder<Enchantment> quickCharge = registry.getHolderOrThrow(Enchantments.QUICK_CHARGE);
+
+        int quick = stack.getEnchantmentLevel(quickCharge);
         int base = 60;
         int duration = base - (quick * 10);
         return Math.max(1, duration);
     }
 
-    private float getCustomPowerForTime(int useTime, ItemStack stack) {
-        float f = (float) useTime / (float) getRepeaterChargeTime(stack);
+    private float getCustomPowerForTime(int useTime, ItemStack stack, Level level) {
+        float f = (float) useTime / (float) getRepeaterChargeTime(stack, level);
         return f > 1.0F ? 1.0F : f;
     }
 
     @Override
     public void onUseTick(Level level, LivingEntity livingEntity, ItemStack stack, int count) {
         if (!level.isClientSide) {
-            int quickCharge = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.QUICK_CHARGE, stack);
+            var registry = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+            Holder<Enchantment> quickChargeEnch = registry.getHolderOrThrow(Enchantments.QUICK_CHARGE);
+            int quickCharge = stack.getEnchantmentLevel(quickChargeEnch);
 
             net.minecraft.sounds.SoundEvent startSound = this.getRepeaterStartSound(quickCharge);
-            net.minecraft.sounds.SoundEvent midSound = quickCharge == 0 ? SoundEvents.CROSSBOW_LOADING_MIDDLE : null;
-
-            float f = (float) (stack.getUseDuration() - count) / (float) getRepeaterChargeTime(stack);
+            net.minecraft.sounds.SoundEvent midSound = quickCharge == 0 ? SoundEvents.CROSSBOW_LOADING_MIDDLE.value() : null;
+            float f = (float) (stack.getUseDuration(livingEntity) - count) / (float) getRepeaterChargeTime(stack, level);
 
             if (f < 0.2F) {
                 this.startSoundPlayed = false;
@@ -76,11 +85,10 @@ public class VanadiumRepeaterItem extends CrossbowItem {
 
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entityLiving, int timeLeft) {
-        int useTime = this.getUseDuration(stack) - timeLeft;
-        float power = getCustomPowerForTime(useTime, stack);
+        int useTime = this.getUseDuration(stack, entityLiving) - timeLeft;
+        float power = getCustomPowerForTime(useTime, stack, level);
 
-        if (power >= 1.0F && !isCharged(stack) && tryLoadRepeaterProjectiles(entityLiving, stack)) {
-            setCharged(stack, true);
+        if (power >= 1.0F && !isCharged(stack) && tryLoadRepeaterProjectiles(entityLiving, stack, level)) {
             SoundSource soundSource = entityLiving instanceof Player ? SoundSource.PLAYERS : SoundSource.HOSTILE;
             level.playSound(null, entityLiving.getX(), entityLiving.getY(), entityLiving.getZ(), SoundEvents.CROSSBOW_LOADING_END, soundSource, 1.0F, 1.0F / (level.getRandom().nextFloat() * 0.5F + 1.0F) + 0.2F);
         }
@@ -88,15 +96,18 @@ public class VanadiumRepeaterItem extends CrossbowItem {
 
     private net.minecraft.sounds.SoundEvent getRepeaterStartSound(int quickCharge) {
         switch (quickCharge) {
-            case 1:  return net.minecraft.sounds.SoundEvents.CROSSBOW_QUICK_CHARGE_1;
-            case 2:  return net.minecraft.sounds.SoundEvents.CROSSBOW_QUICK_CHARGE_2;
-            case 3:  return net.minecraft.sounds.SoundEvents.CROSSBOW_QUICK_CHARGE_3;
-            default: return net.minecraft.sounds.SoundEvents.CROSSBOW_LOADING_START;
+            case 1:  return net.minecraft.sounds.SoundEvents.CROSSBOW_QUICK_CHARGE_1.value();
+            case 2:  return net.minecraft.sounds.SoundEvents.CROSSBOW_QUICK_CHARGE_2.value();
+            case 3:  return net.minecraft.sounds.SoundEvents.CROSSBOW_QUICK_CHARGE_3.value();
+            default: return net.minecraft.sounds.SoundEvents.CROSSBOW_LOADING_START.value();
         }
     }
 
-    private boolean tryLoadRepeaterProjectiles(LivingEntity entity, ItemStack crossbow) {
-        int multishot = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.MULTISHOT, crossbow) > 0 ? 3 : 1;
+    private boolean tryLoadRepeaterProjectiles(LivingEntity entity, ItemStack crossbow, Level level) {
+        var registry = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+        Holder<Enchantment> multishotEnch = registry.getHolderOrThrow(Enchantments.MULTISHOT);
+
+        int multishot = crossbow.getEnchantmentLevel(multishotEnch) > 0 ? 3 : 1;
         boolean isCreative = entity instanceof Player player && player.getAbilities().instabuild;
 
         ItemStack ammoToLoad = entity.getProjectile(crossbow);
@@ -111,19 +122,14 @@ public class VanadiumRepeaterItem extends CrossbowItem {
             return false;
         }
 
-        CompoundTag tag = crossbow.getOrCreateTag();
-        ListTag listTag = new ListTag();
-
+        List<ItemStack> projectiles = new ArrayList<>();
         for (int i = 0; i < multishot; i++) {
             ItemStack singleShot = baseAmmo.copy();
             singleShot.setCount(1);
-
-            CompoundTag projTag = new CompoundTag();
-            singleShot.save(projTag);
-            listTag.add(projTag);
+            projectiles.add(singleShot);
         }
 
-        tag.put("ChargedProjectiles", listTag);
+        crossbow.set(DataComponents.CHARGED_PROJECTILES, ChargedProjectiles.of(projectiles));
 
         if (!isCreative) {
             ammoToLoad.shrink(1);
@@ -133,6 +139,16 @@ public class VanadiumRepeaterItem extends CrossbowItem {
         }
 
         return true;
+    }
+
+    public static boolean isCharged(ItemStack stack) {
+        ChargedProjectiles projectiles = stack.get(DataComponents.CHARGED_PROJECTILES);
+        return projectiles != null && !projectiles.isEmpty();
+    }
+
+    public static boolean containsChargedProjectile(ItemStack stack, Item item) {
+        ChargedProjectiles projectiles = stack.get(DataComponents.CHARGED_PROJECTILES);
+        return projectiles != null && projectiles.contains(item);
     }
 
     @Override
@@ -146,7 +162,7 @@ public class VanadiumRepeaterItem extends CrossbowItem {
 
         if (wasCharged) {
             copyOfCharged = stack.copy();
-            boolean hasFirework = RepeaterHelper.stackHasFirework(copyOfCharged);
+            boolean hasFirework = containsChargedProjectile(copyOfCharged, Items.FIREWORK_ROCKET);
             velocity = hasFirework ? 1.6F : 3.15F;
             inaccuracy = 1.0F;
         }

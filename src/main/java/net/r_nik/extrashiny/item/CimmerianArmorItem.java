@@ -1,66 +1,59 @@
 package net.r_nik.extrashiny.item;
 
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.ImmutableMultimap.Builder;
-import com.google.common.collect.Multimap;
-import net.minecraft.client.model.HumanoidModel;
+import net.minecraft.core.Holder;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterial;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.neoforged.neoforge.client.extensions.common.IClientItemExtensions;
+import net.minecraft.client.model.HumanoidModel;
+import net.r_nik.extrashiny.ExtraShiny;
 import net.r_nik.extrashiny.attribute.ModAttributes;
 import net.r_nik.extrashiny.client.model.CimmerianArmorModel;
 
-import java.util.UUID;
 import java.util.function.Consumer;
 
 public class CimmerianArmorItem extends ArmorItem {
 
     private static final double REBOUND_PER_PIECE = 0.125D;
 
-    private static final UUID REBOUND_HELMET_UUID = UUID.fromString("7b7b6fb7-5c4f-4c1e-9d7a-9c2d4e1f1a01");
-    private static final UUID REBOUND_CHEST_UUID  = UUID.fromString("7b7b6fb7-5c4f-4c1e-9d7a-9c2d4e1f1a02");
-    private static final UUID REBOUND_LEGS_UUID   = UUID.fromString("7b7b6fb7-5c4f-4c1e-9d7a-9c2d4e1f1a03");
-    private static final UUID REBOUND_BOOTS_UUID  = UUID.fromString("7b7b6fb7-5c4f-4c1e-9d7a-9c2d4e1f1a04");
+    private static final ResourceLocation REBOUND_HELMET_ID = ResourceLocation.fromNamespaceAndPath(ExtraShiny.MOD_ID, "rebound_helmet");
+    private static final ResourceLocation REBOUND_CHEST_ID  = ResourceLocation.fromNamespaceAndPath(ExtraShiny.MOD_ID, "rebound_chest");
+    private static final ResourceLocation REBOUND_LEGS_ID   = ResourceLocation.fromNamespaceAndPath(ExtraShiny.MOD_ID, "rebound_legs");
+    private static final ResourceLocation REBOUND_BOOTS_ID  = ResourceLocation.fromNamespaceAndPath(ExtraShiny.MOD_ID, "rebound_boots");
 
-    public CimmerianArmorItem(ArmorMaterial material, Type type, Properties properties) {
+    public CimmerianArmorItem(Holder<ArmorMaterial> material, Type type, Properties properties) {
         super(material, type, properties);
     }
 
     @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(EquipmentSlot slot, ItemStack stack) {
-        Builder<Attribute, AttributeModifier> builder = ImmutableMultimap.builder();
-        builder.putAll(super.getAttributeModifiers(slot, stack));
+    public ItemAttributeModifiers getDefaultAttributeModifiers(ItemStack stack) {
+        ItemAttributeModifiers base = super.getDefaultAttributeModifiers(stack);
 
-        if (slot == this.getEquipmentSlot()) {
-            builder.put(
-                    ModAttributes.DAMAGE_REBOUND.get(),
-                    new AttributeModifier(getReboundUuid(slot), "Damage rebound", REBOUND_PER_PIECE, AttributeModifier.Operation.ADDITION)
-            );
-            return builder.build();
-        }
-
-        return super.getAttributeModifiers(slot, stack);
+        EquipmentSlot slot = this.getEquipmentSlot();
+        return base.withModifierAdded(
+                ModAttributes.DAMAGE_REBOUND,
+                new AttributeModifier(getReboundId(slot), REBOUND_PER_PIECE, AttributeModifier.Operation.ADD_VALUE),
+                EquipmentSlotGroup.bySlot(slot)
+        );
     }
 
-    private static UUID getReboundUuid(EquipmentSlot slot) {
+    private static ResourceLocation getReboundId(EquipmentSlot slot) {
         return switch (slot) {
-            case HEAD -> REBOUND_HELMET_UUID;
-            case CHEST -> REBOUND_CHEST_UUID;
-            case LEGS -> REBOUND_LEGS_UUID;
-            case FEET -> REBOUND_BOOTS_UUID;
-            default -> REBOUND_CHEST_UUID;
+            case HEAD -> REBOUND_HELMET_ID;
+            case CHEST -> REBOUND_CHEST_ID;
+            case LEGS -> REBOUND_LEGS_ID;
+            case FEET -> REBOUND_BOOTS_ID;
+            default -> REBOUND_CHEST_ID;
         };
     }
 
     @Override
-    @OnlyIn(Dist.CLIENT)
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
         consumer.accept(new IClientItemExtensions() {
             @Override

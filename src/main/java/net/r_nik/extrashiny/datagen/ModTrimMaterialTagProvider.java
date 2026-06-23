@@ -6,7 +6,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.tags.TagsProvider;
 import net.minecraft.world.item.armortrim.TrimMaterial;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.r_nik.extrashiny.ExtraShiny;
 import net.r_nik.extrashiny.trim.ExtraShinyTrimMaterials;
 
@@ -37,5 +37,4 @@ public class ModTrimMaterialTagProvider extends TagsProvider<TrimMaterial> {
                         ExtraShinyTrimMaterials.DAMASK_DARKER
                 );
     }
-
 }

@@ -1,18 +1,20 @@
 package net.r_nik.extrashiny.client;
 
 import net.minecraft.ChatFormatting;
+import net.minecraft.core.Holder;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.MutableComponent;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.minecraft.world.item.enchantment.ItemEnchantments;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 
 import java.util.*;
 
-@Mod.EventBusSubscriber(bus = Mod.EventBusSubscriber.Bus.FORGE)
+@EventBusSubscriber
 public class OvercapEnchantmentTooltip {
 
     @SubscribeEvent
@@ -20,20 +22,19 @@ public class OvercapEnchantmentTooltip {
         ItemStack stack = event.getItemStack();
         if (!stack.isEnchanted()) return;
 
-        Map<Enchantment, Integer> enchants = EnchantmentHelper.getEnchantments(stack);
+        ItemEnchantments enchants = EnchantmentHelper.getEnchantmentsForCrafting(stack);
         if (enchants.isEmpty()) return;
 
         List<Component> tooltip = event.getToolTip();
 
         Set<String> overcappedNames = new HashSet<>();
 
-        for (var entry : enchants.entrySet()) {
-            Enchantment ench = entry.getKey();
-            int level = entry.getValue();
+        for (Holder<Enchantment> ench : enchants.keySet()) {
+            int level = enchants.getLevel(ench);
 
-            if (level > ench.getMaxLevel()) {
+            if (level > ench.value().getMaxLevel()) {
                 overcappedNames.add(
-                        ench.getFullname(level).getString()
+                        Enchantment.getFullname(ench, level).getString()
                 );
             }
         }

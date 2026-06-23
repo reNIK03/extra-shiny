@@ -3,9 +3,9 @@ package net.r_nik.extrashiny.datagen;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.PackOutput;
 import net.minecraft.tags.BlockTags;
-import net.minecraftforge.common.Tags;
-import net.minecraftforge.common.data.BlockTagsProvider;
-import net.minecraftforge.common.data.ExistingFileHelper;
+import net.neoforged.neoforge.common.Tags;
+import net.neoforged.neoforge.common.data.BlockTagsProvider;
+import net.neoforged.neoforge.common.data.ExistingFileHelper;
 import net.r_nik.extrashiny.ExtraShiny;
 import net.r_nik.extrashiny.block.ModBlocks;
 import org.jetbrains.annotations.Nullable;
@@ -94,7 +94,7 @@ public class ModBlockTagGenerator extends BlockTagsProvider {
         this.tag(BlockTags.NEEDS_DIAMOND_TOOL)
                 .add(ModBlocks.DAMASK_BLOCK.get(),
                         ModBlocks.DAMASK_INGOT_BLOCK.get()
-                        );
+                );
 
 
         this.tag(BlockTags.MINEABLE_WITH_PICKAXE)

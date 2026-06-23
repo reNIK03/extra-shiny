@@ -13,8 +13,10 @@ import net.r_nik.extrashiny.network.RefiningButtonPacket;
 public class RefiningTableScreen extends AbstractContainerScreen<RefiningTableMenu> {
 
     private static final ResourceLocation TEXTURE =
-            new ResourceLocation("extrashiny", "textures/gui/refining_table_gui.png");
+            ResourceLocation.fromNamespaceAndPath("extrashiny", "textures/gui/refining_table_gui.png");
 
+    private static final int TEX_WIDTH = 256;
+    private static final int TEX_HEIGHT = 256;
 
     private static final int BUTTON_WIDTH = 40;
     private static final int BUTTON_HEIGHT = 18;
@@ -54,21 +56,20 @@ public class RefiningTableScreen extends AbstractContainerScreen<RefiningTableMe
                 0,
                 0,
                 imageWidth,
-                imageHeight
+                imageHeight,
+                TEX_WIDTH,
+                TEX_HEIGHT
         );
 
         renderRefineButton(guiGraphics, mouseX, mouseY);
         renderOvercapButton(guiGraphics, mouseX, mouseY);
     }
 
-
     private void renderRefineButton(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         var blockEntity = menu.getBlockEntity();
 
         if (blockEntity.canOvercapRefine()) return;
-
         if (menu.canOvercapRefine()) return;
-
         if (!blockEntity.canRefine()) return;
 
         int x = leftPos + REFINE_X;
@@ -87,10 +88,11 @@ public class RefiningTableScreen extends AbstractContainerScreen<RefiningTableMe
                 u,
                 BUTTON_V,
                 BUTTON_WIDTH,
-                BUTTON_HEIGHT
+                BUTTON_HEIGHT,
+                TEX_WIDTH,
+                TEX_HEIGHT
         );
     }
-
 
     private void renderOvercapButton(GuiGraphics guiGraphics, int mouseX, int mouseY) {
         if (!menu.getBlockEntity().canOvercapRefine()) return;
@@ -111,13 +113,15 @@ public class RefiningTableScreen extends AbstractContainerScreen<RefiningTableMe
                 u,
                 BUTTON_V,
                 BUTTON_WIDTH,
-                BUTTON_HEIGHT
+                BUTTON_HEIGHT,
+                TEX_WIDTH,
+                TEX_HEIGHT
         );
     }
 
     @Override
     public void render(GuiGraphics guiGraphics, int mouseX, int mouseY, float partialTick) {
-        renderBackground(guiGraphics);
+        renderBackground(guiGraphics, mouseX, mouseY, partialTick);
         super.render(guiGraphics, mouseX, mouseY, partialTick);
         renderTooltip(guiGraphics, mouseX, mouseY);
     }
@@ -127,18 +131,17 @@ public class RefiningTableScreen extends AbstractContainerScreen<RefiningTableMe
         if (button != 0) return super.mouseClicked(mouseX, mouseY, button);
 
         if (isMouseOverRefine(mouseX, mouseY) && menu.canNormalRefine()) {
-            ModMessages.sendToServer(new RefiningButtonPacket(false)); // NORMAL
+            ModMessages.sendToServer(new RefiningButtonPacket(false));
             return true;
         }
 
         if (isMouseOverOvercap(mouseX, mouseY) && menu.canOvercapRefine()) {
-            ModMessages.sendToServer(new RefiningButtonPacket(true));  // GOLDEN
+            ModMessages.sendToServer(new RefiningButtonPacket(true));
             return true;
         }
 
         return super.mouseClicked(mouseX, mouseY, button);
     }
-
 
     private boolean isMouseOverRefine(double mouseX, double mouseY) {
         int x = leftPos + 24;

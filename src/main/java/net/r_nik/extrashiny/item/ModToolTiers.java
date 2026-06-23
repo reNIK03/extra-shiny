@@ -1,59 +1,39 @@
 package net.r_nik.extrashiny.item;
 
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.tags.BlockTags;
 import net.minecraft.world.item.Tier;
-import net.minecraft.world.item.Tiers;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraftforge.common.ForgeTier;
-import net.minecraftforge.common.TierSortingRegistry;
-import net.r_nik.extrashiny.ExtraShiny;
-
-import java.util.List;
+import net.neoforged.neoforge.common.SimpleTier;
 
 public class ModToolTiers {
 
-    public static final Tier VANADIUM = TierSortingRegistry.registerTier(
-            new ForgeTier(
-                    3,
-                    1621,
-                    10.0F,
-                    3.0F,
-                    16,
-                    null, // Keep as null to avoid breaking vanilla tiers
-                    () -> Ingredient.of(ModItems.VANADIUM_INGOT.get())
-            ),
-            new ResourceLocation(ExtraShiny.MOD_ID, "vanadium"),
-            List.of(Tiers.DIAMOND),
-            List.of(Tiers.NETHERITE)
+    // Vanadium
+    public static final Tier VANADIUM = new SimpleTier(
+            BlockTags.INCORRECT_FOR_DIAMOND_TOOL,
+            1621,
+            10.0F,
+            3.0F,
+            16,
+            () -> Ingredient.of(ModItems.VANADIUM_INGOT.get())
     );
 
-    public static final Tier OSMIUM = TierSortingRegistry.registerTier(
-            new ForgeTier(
-                    2,
-                    157,
-                    9.0F,
-                    1.0F,
-                    18,
-                    null, // Changed from BlockTags.NEEDS_STONE_TOOL
-                    () -> Ingredient.of(ModItems.OSMIUM_INGOT.get())
-            ),
-            new ResourceLocation(ExtraShiny.MOD_ID, "osmium"),
-            List.of(Tiers.IRON), // Adjusted so it sits parallel/above Iron, not Gold
-            List.of(Tiers.DIAMOND)
+    // Osmium
+    public static final Tier OSMIUM = new SimpleTier(
+            BlockTags.INCORRECT_FOR_IRON_TOOL,
+            157,
+            9.0F,
+            1.0F,
+            18,
+            () -> Ingredient.of(ModItems.OSMIUM_INGOT.get())
     );
 
-    public static final Tier DAMASK = TierSortingRegistry.registerTier(
-            new ForgeTier(
-                    4,
-                    2031,
-                    9.0F,
-                    3.0F,
-                    15,
-                    null, // Changed from BlockTags.NEEDS_DIAMOND_TOOL
-                    () -> Ingredient.of(ModItems.DAMASK_INGOT.get())
-            ),
-            new ResourceLocation(ExtraShiny.MOD_ID, "damask"),
-            List.of(Tiers.NETHERITE),
-            List.of()
+    // Damask
+    public static final Tier DAMASK = new SimpleTier(
+            BlockTags.INCORRECT_FOR_NETHERITE_TOOL,
+            2031,
+            9.0F,
+            3.0F,
+            15,
+            () -> Ingredient.of(ModItems.DAMASK_INGOT.get())
     );
 }

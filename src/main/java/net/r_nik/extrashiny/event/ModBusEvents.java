@@ -1,23 +1,23 @@
 package net.r_nik.extrashiny.event;
 
-import net.minecraftforge.event.entity.EntityAttributeCreationEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.r_nik.extrashiny.ExtraShiny;
-import net.r_nik.extrashiny.entity.ModEntities;
-import net.r_nik.extrashiny.entity.VanadiumGolemEntity;
-import net.r_nik.extrashiny.entity.EnforcerEntity;
+import net.minecraft.world.entity.SpawnPlacementTypes;
 import net.minecraft.world.entity.SpawnPlacements;
 import net.minecraft.world.level.levelgen.Heightmap;
-import net.minecraftforge.event.entity.SpawnPlacementRegisterEvent;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
+import net.neoforged.neoforge.event.entity.RegisterSpawnPlacementsEvent;
+import net.r_nik.extrashiny.ExtraShiny;
+import net.r_nik.extrashiny.entity.EnforcerEntity;
+import net.r_nik.extrashiny.entity.ModEntities;
+import net.r_nik.extrashiny.entity.VanadiumGolemEntity;
 
-
-@Mod.EventBusSubscriber(modid = ExtraShiny.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+// 1.21.1: Removed 'bus' parameter as it is now inferred automatically
+@EventBusSubscriber(modid = ExtraShiny.MOD_ID)
 public class ModBusEvents {
 
     @SubscribeEvent
     public static void registerAttributes(EntityAttributeCreationEvent event) {
-
         event.put(
                 ModEntities.VANADIUM_GOLEM.get(),
                 VanadiumGolemEntity.createAttributes().build()
@@ -29,18 +29,14 @@ public class ModBusEvents {
         );
     }
 
-
     @SubscribeEvent
-    public static void registerSpawnPlacements(SpawnPlacementRegisterEvent event) {
+    public static void registerSpawnPlacements(RegisterSpawnPlacementsEvent event) {
         event.register(
                 ModEntities.ENFORCER.get(),
-                SpawnPlacements.Type.NO_RESTRICTIONS,
+                SpawnPlacementTypes.NO_RESTRICTIONS,
                 Heightmap.Types.MOTION_BLOCKING_NO_LEAVES,
                 EnforcerEntity::canEnforcerSpawn,
-                SpawnPlacementRegisterEvent.Operation.REPLACE
+                RegisterSpawnPlacementsEvent.Operation.REPLACE
         );
     }
-
-
-
 }

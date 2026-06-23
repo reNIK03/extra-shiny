@@ -1,5 +1,6 @@
 package net.r_nik.extrashiny.block;
 
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -12,6 +13,9 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
 
 public class OsmiumSpotlightBlock extends FaceAttachedHorizontalDirectionalBlock {
+
+    public static final MapCodec<OsmiumSpotlightBlock> CODEC = simpleCodec(OsmiumSpotlightBlock::new);
+
     private static final VoxelShape SHAPE_FLOOR = Block.box(4.0D, 0.0D, 4.0D, 12.0D, 8.0D, 12.0D);
     private static final VoxelShape SHAPE_CEILING = Block.box(4.0D, 8.0D, 4.0D, 12.0D, 16.0D, 12.0D);
     private static final VoxelShape SHAPE_WALL_NORTH = Block.box(4.0D, 4.0D, 8.0D, 12.0D, 12.0D, 16.0D);
@@ -27,7 +31,12 @@ public class OsmiumSpotlightBlock extends FaceAttachedHorizontalDirectionalBlock
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+    protected MapCodec<? extends FaceAttachedHorizontalDirectionalBlock> codec() {
+        return CODEC;
+    }
+
+    @Override
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
         switch (state.getValue(FACE)) {
             case FLOOR:
                 return SHAPE_FLOOR;

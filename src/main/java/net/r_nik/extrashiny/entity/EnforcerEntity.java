@@ -3,16 +3,24 @@ package net.r_nik.extrashiny.entity;
 import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.core.Holder;
+import net.minecraft.core.particles.ShriekParticleOption;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.AttributeInstance;
+import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
@@ -25,22 +33,18 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ServerLevelAccessor;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.DynamicGameEventListener;
+import net.minecraft.world.level.gameevent.EntityPositionSource;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.gameevent.PositionSource;
-import net.minecraft.world.level.gameevent.EntityPositionSource;
 import net.minecraft.world.level.gameevent.vibrations.VibrationSystem;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.entity.ai.attributes.AttributeInstance;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.ServerLevelAccessor;
+import net.r_nik.extrashiny.ExtraShiny;
 import net.r_nik.extrashiny.sound.ModSounds;
+import net.minecraft.sounds.SoundEvents;
 
 import javax.annotation.Nullable;
 import java.util.Comparator;
@@ -48,12 +52,15 @@ import java.util.UUID;
 import java.util.function.BiConsumer;
 
 public class EnforcerEntity extends Monster implements VibrationSystem {
-
     // ==========================================
     // CONSTANTS & TUNING
     // ==========================================
-    private static final UUID AGGRO_SPEED_UUID = UUID.fromString("f0b7f1d4-52b8-4e5a-9e7e-4d1d6c2e2a11");
-    private static final AttributeModifier AGGRO_SPEED_BONUS = new AttributeModifier(AGGRO_SPEED_UUID, "enforcer aggro speed", 1.5D, AttributeModifier.Operation.MULTIPLY_TOTAL);
+    private static final AttributeModifier AGGRO_SPEED_BONUS = new AttributeModifier(
+            ResourceLocation.fromNamespaceAndPath(ExtraShiny.MOD_ID, "enforcer_aggro_speed"),
+            1.5D,
+            AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL
+    );
+
     private static final int VIBRATION_COOLDOWN_TICKS = 40;
     private static final float MOVE_TURN_SPEED_DEG_PER_TICK = 8.0F;
 
@@ -162,15 +169,16 @@ public class EnforcerEntity extends Monster implements VibrationSystem {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(SNIFFING, false);
-        this.entityData.define(HOWLING, false);
-        this.entityData.define(BITING, false);
-        this.entityData.define(CLIENT_ANGER, 0);
-        this.entityData.define(SIGNAL_TICKS, 0);
-        this.entityData.define(AGGRESSIVE, false);
-        this.entityData.define(HOWL_LOCK_YAW, 0.0F);
+    protected void defineSynchedData(SynchedEntityData.Builder builder) {
+        super.defineSynchedData(builder);
+
+        builder.define(SNIFFING, false);
+        builder.define(HOWLING, false);
+        builder.define(BITING, false);
+        builder.define(CLIENT_ANGER, 0);
+        builder.define(SIGNAL_TICKS, 0);
+        builder.define(AGGRESSIVE, false);
+        builder.define(HOWL_LOCK_YAW, 0.0F);
     }
 
     // ==========================================
@@ -372,11 +380,12 @@ public class EnforcerEntity extends Monster implements VibrationSystem {
         boolean shouldBoost = this.getTarget() != null && this.getTarget().isAlive();
 
         if (shouldBoost) {
-            if (!inst.hasModifier(AGGRO_SPEED_BONUS)) {
+            // Apply by ResourceLocation key instead of UUID
+            if (!inst.hasModifier(AGGRO_SPEED_BONUS.id())) {
                 inst.addTransientModifier(AGGRO_SPEED_BONUS);
             }
         } else {
-            inst.removeModifier(AGGRO_SPEED_UUID);
+            inst.removeModifier(AGGRO_SPEED_BONUS.id());
         }
     }
 
@@ -799,9 +808,8 @@ public class EnforcerEntity extends Monster implements VibrationSystem {
         public PositionSource getPositionSource() {
             return new EntityPositionSource(EnforcerEntity.this, EnforcerEntity.this.getEyeHeight());
         }
-
         @Override
-        public boolean canReceiveVibration(ServerLevel level, BlockPos pos, GameEvent event, GameEvent.Context context) {
+        public boolean canReceiveVibration(ServerLevel level, BlockPos pos, Holder<GameEvent> event, GameEvent.Context context) {
             if (!EnforcerEntity.this.isAlive()) return false;
             if (EnforcerEntity.this.vibrationCooldownTicks > 0) return false;
 
@@ -821,7 +829,7 @@ public class EnforcerEntity extends Monster implements VibrationSystem {
         }
 
         @Override
-        public void onReceiveVibration(ServerLevel level, BlockPos pos, GameEvent event, @Nullable Entity sourceEntity, @Nullable Entity projectileEntity, float distance) {
+        public void onReceiveVibration(ServerLevel level, BlockPos pos, Holder<GameEvent> event, @Nullable Entity sourceEntity, @Nullable Entity projectileEntity, float distance) {
             if (sourceEntity instanceof EnforcerEntity) return;
 
             EnforcerEntity.this.vibrationCooldownTicks = VIBRATION_COOLDOWN_TICKS;
@@ -833,10 +841,7 @@ public class EnforcerEntity extends Monster implements VibrationSystem {
                 EnforcerEntity.this.investigateTicks = INVESTIGATE_DURATION_TICKS;
             }
 
-            SoundEvent click = ForgeRegistries.SOUND_EVENTS.getValue(new ResourceLocation("minecraft", "block.sculk_sensor.clicking"));
-            if (click != null) {
-                level.playSound(null, EnforcerEntity.this.blockPosition(), click, SoundSource.HOSTILE, 1.0F, 0.9F + level.random.nextFloat() * 0.2F);
-            }
+            level.playSound(null, EnforcerEntity.this.blockPosition(), SoundEvents.SCULK_CLICKING, SoundSource.HOSTILE, 1.0F, 0.9F + level.random.nextFloat() * 0.2F);
 
             if (sourceEntity instanceof LivingEntity le && EnforcerEntity.this.isValidSuspect(le)) {
                 int add = (projectileEntity != null) ? ANGER_VIBRATION_PROJECTILE : ANGER_VIBRATION_NORMAL;
@@ -876,15 +881,17 @@ public class EnforcerEntity extends Monster implements VibrationSystem {
     }
 
     @Override
-    protected void dropAllDeathLoot(DamageSource source) {
-        super.dropAllDeathLoot(source);
+    protected void dropCustomDeathLoot(ServerLevel level, DamageSource source, boolean recentlyHit) {
+        super.dropCustomDeathLoot(level, source, recentlyHit);
 
-        if (this.level().isClientSide) return;
-        if (!this.level().getGameRules().getBoolean(net.minecraft.world.level.GameRules.RULE_DOMOBLOOT)) return;
 
         int looting = 0;
         if (source.getEntity() instanceof LivingEntity killer) {
-            looting = EnchantmentHelper.getEnchantmentLevel(Enchantments.MOB_LOOTING, killer);
+            var registry = level.registryAccess().registryOrThrow(net.minecraft.core.registries.Registries.ENCHANTMENT);
+
+            var lootingHolder = registry.getHolderOrThrow(Enchantments.LOOTING);
+
+            looting = EnchantmentHelper.getItemEnchantmentLevel(lootingHolder, killer.getMainHandItem());
         }
 
         float baseChance = 0.50F;

@@ -1,8 +1,8 @@
 package net.r_nik.extrashiny.item;
 
-import com.google.common.collect.ImmutableMultimap;
-import com.google.common.collect.Multimap;
-import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
+import net.minecraft.core.Holder;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -11,65 +11,44 @@ import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.EquipmentSlotGroup;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MoverType;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.component.ItemAttributeModifiers;
+import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
+import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.client.extensions.common.IClientItemExtensions;
-import net.r_nik.extrashiny.client.ModBlockEntityWithoutLevelRenderer;
+import net.r_nik.extrashiny.ExtraShiny;
 import net.r_nik.extrashiny.entity.VanadiumPartisanEntity;
-
-import java.util.function.Consumer;
 
 public class VanadiumPartisanItem extends TridentItem {
 
     public VanadiumPartisanItem(Properties properties) {
-        super(properties.rarity(Rarity.COMMON));
+        super(properties.rarity(Rarity.COMMON).attributes(
+                ItemAttributeModifiers.builder()
+                        .add(Attributes.ATTACK_DAMAGE, new AttributeModifier(
+                                ResourceLocation.fromNamespaceAndPath(ExtraShiny.MOD_ID, "partisan_dmg"),
+                                11.0D, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+                        .add(Attributes.ATTACK_SPEED, new AttributeModifier(
+                                ResourceLocation.fromNamespaceAndPath(ExtraShiny.MOD_ID, "partisan_spd"),
+                                -2.9D, AttributeModifier.Operation.ADD_VALUE), EquipmentSlotGroup.MAINHAND)
+                        .build()
+        ));
     }
 
     @Override
     public boolean isValidRepairItem(ItemStack toRepair, ItemStack repair) {
         return repair.is(ModItems.VANADIUM_INGOT.get()) || super.isValidRepairItem(toRepair, repair);
     }
-    
-    @Override
-    public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        consumer.accept(new IClientItemExtensions() {
-            @Override
-            public BlockEntityWithoutLevelRenderer getCustomRenderer() {
-                return ModBlockEntityWithoutLevelRenderer.INSTANCE;
-            }
-        });
-    }
 
-    @Override
-    public Multimap<Attribute, AttributeModifier> getDefaultAttributeModifiers(EquipmentSlot slot) {
-        if (slot == EquipmentSlot.MAINHAND) {
-            ImmutableMultimap.Builder<Attribute, AttributeModifier> builder =
-                    ImmutableMultimap.builder();
-
-            builder.put(Attributes.ATTACK_DAMAGE,
-                    new AttributeModifier(BASE_ATTACK_DAMAGE_UUID,
-                            "Weapon modifier", 11.0D, AttributeModifier.Operation.ADDITION));
-
-
-            builder.put(Attributes.ATTACK_SPEED,
-                    new AttributeModifier(BASE_ATTACK_SPEED_UUID,
-                            "Weapon modifier", -2.9D, AttributeModifier.Operation.ADDITION));
-
-            return builder.build();
-        }
-
-        return super.getDefaultAttributeModifiers(slot);
-    }
 
     @Override
     public int getEnchantmentValue() {
@@ -81,19 +60,15 @@ public class VanadiumPartisanItem extends TridentItem {
         return stack.isEnchanted();
     }
 
-
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
         ItemStack stack = player.getItemInHand(hand);
+        if (stack.getDamageValue() >= stack.getMaxDamage() - 1) return InteractionResultHolder.fail(stack);
 
-        int damage = stack.getDamageValue();
-        int max = stack.getMaxDamage();
+        var registry = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+        Holder<Enchantment> riptide = registry.getHolderOrThrow(Enchantments.RIPTIDE);
 
-        if (max - damage <= 1) {
-            return InteractionResultHolder.fail(stack);
-        }
-
-        if (EnchantmentHelper.getRiptide(stack) > 0 && !player.isInWaterOrRain()) {
+        if (stack.getEnchantmentLevel(riptide) > 0 && !player.isInWaterOrRain()) {
             return InteractionResultHolder.fail(stack);
         }
 
@@ -102,87 +77,56 @@ public class VanadiumPartisanItem extends TridentItem {
     }
 
     @Override
-    public int getUseDuration(ItemStack stack) {
+    public int getUseDuration(ItemStack stack, LivingEntity entity) {
         return 72000;
-    }
-
-    @Override
-    public UseAnim getUseAnimation(ItemStack stack) {
-        return UseAnim.SPEAR;
     }
 
     @Override
     public void releaseUsing(ItemStack stack, Level level, LivingEntity entity, int timeLeft) {
         if (!(entity instanceof Player player)) return;
 
-        int used = this.getUseDuration(stack) - timeLeft;
+        int used = this.getUseDuration(stack, entity) - timeLeft;
         if (used < 10) return;
 
-        int riptide = EnchantmentHelper.getRiptide(stack);
+        var registry = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+        int riptide = stack.getEnchantmentLevel(registry.getHolderOrThrow(Enchantments.RIPTIDE));
 
         if (riptide > 0 && !player.isInWaterOrRain()) return;
 
-        stack.hurtAndBreak(1, player, p -> p.broadcastBreakEvent(entity.getUsedItemHand()));
+        stack.hurtAndBreak(1, player, EquipmentSlot.MAINHAND);
 
         if (riptide == 0) {
             if (!level.isClientSide) {
-                VanadiumPartisanEntity partisan =
-                        new VanadiumPartisanEntity(level, player, stack.copy());
+                VanadiumPartisanEntity partisan = new VanadiumPartisanEntity(level, player, stack.copy());
+                partisan.shootFromRotation(player, player.getXRot(), player.getYRot(), 0.0F, 2.5F, 1.0F);
 
-                partisan.shootFromRotation(
-                        player,
-                        player.getXRot(),
-                        player.getYRot(),
-                        0.0F,
-                        2.5F,
-                        1.0F
-                );
-
-                if (player.getAbilities().instabuild) {
-                    partisan.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
-                }
+                if (player.getAbilities().instabuild) partisan.pickup = AbstractArrow.Pickup.CREATIVE_ONLY;
 
                 level.addFreshEntity(partisan);
-
-                if (!player.getAbilities().instabuild)
-                    player.getInventory().removeItem(stack);
+                if (!player.getAbilities().instabuild) player.getInventory().removeItem(stack);
             }
-
-            level.playSound(null, player, SoundEvents.TRIDENT_THROW,
-                    SoundSource.PLAYERS, 1.0F, 1.0F);
-        }
-
-        else {
+            level.playSound(null, player.getX(), player.getY(), player.getZ(), SoundEvents.TRIDENT_THROW, SoundSource.PLAYERS, 1.0F, 1.0F);        } else {
             float yaw = player.getYRot();
             float pitch = player.getXRot();
-
             float vx = -Mth.sin(yaw * (float)Math.PI / 180F) * Mth.cos(pitch * (float)Math.PI / 180F);
             float vy = -Mth.sin(pitch * (float)Math.PI / 180F);
             float vz =  Mth.cos(yaw * (float)Math.PI / 180F) * Mth.cos(pitch * (float)Math.PI / 180F);
 
-            float length = Mth.sqrt(vx * vx + vy * vy + vz * vz);
             float speed = 3.0F * ((1.0F + riptide) / 4.0F);
+            player.push(vx * speed, vy * speed, vz * speed);
 
-            vx = vx * speed / length;
-            vy = vy * speed / length;
-            vz = vz * speed / length;
+            player.startAutoSpinAttack(20, 11.0F, stack);
 
-            player.push(vx, vy, vz);
-            player.startAutoSpinAttack(20);
+            if (player.onGround()) player.move(MoverType.SELF, new Vec3(0.0, 1.2, 0.0));
 
-            if (player.onGround()) {
-                player.move(MoverType.SELF, new Vec3(0.0, 1.1999999F, 0.0));
-            }
+            Holder<SoundEvent> riptideSound = switch (riptide) {
+                case 3 -> SoundEvents.TRIDENT_RIPTIDE_3;
+                case 2 -> SoundEvents.TRIDENT_RIPTIDE_2;
+                default -> SoundEvents.TRIDENT_RIPTIDE_1;
+            };
 
-            SoundEvent riptideSound =
-                    riptide >= 3 ? SoundEvents.TRIDENT_RIPTIDE_3 :
-                            riptide == 2 ? SoundEvents.TRIDENT_RIPTIDE_2 :
-                                    SoundEvents.TRIDENT_RIPTIDE_1;
-
-            level.playSound(null, player, riptideSound,
-                    SoundSource.PLAYERS, 1.0F, 1.0F);
+            level.playSound(null, player.getX(), player.getY(), player.getZ(), riptideSound, SoundSource.PLAYERS, 1.0F, 1.0F);
         }
-
         player.awardStat(Stats.ITEM_USED.get(this));
         player.gameEvent(GameEvent.ITEM_INTERACT_FINISH);
     }

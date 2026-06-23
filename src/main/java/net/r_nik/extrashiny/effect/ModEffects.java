@@ -1,23 +1,22 @@
 package net.r_nik.extrashiny.effect;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.bus.api.IEventBus;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.r_nik.extrashiny.ExtraShiny;
 
 public class ModEffects {
 
     public static final DeferredRegister<MobEffect> MOB_EFFECTS =
-            DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, ExtraShiny.MOD_ID);
+            DeferredRegister.create(Registries.MOB_EFFECT, ExtraShiny.MOD_ID);
 
-    public static final RegistryObject<MobEffect> WISDOM =
+    public static final DeferredHolder<MobEffect, MobEffect> WISDOM =
             MOB_EFFECTS.register("wisdom", WisdomEffect::new);
 
-    public static final RegistryObject<MobEffect> PHANTASM =
+    public static final DeferredHolder<MobEffect, MobEffect> PHANTASM =
             MOB_EFFECTS.register("phantasm", PhantasmEffect::new);
-
 
     public static void register(IEventBus eventBus) {
         MOB_EFFECTS.register(eventBus);

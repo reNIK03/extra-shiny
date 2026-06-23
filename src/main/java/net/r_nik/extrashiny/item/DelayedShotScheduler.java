@@ -3,15 +3,16 @@ package net.r_nik.extrashiny.item;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.tick.ServerTickEvent;
+import net.r_nik.extrashiny.ExtraShiny;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-@Mod.EventBusSubscriber
+@EventBusSubscriber(modid = ExtraShiny.MOD_ID)
 public class DelayedShotScheduler {
 
     private record ScheduledShot(
@@ -44,14 +45,12 @@ public class DelayedShotScheduler {
     }
 
     @SubscribeEvent
-    public static void onServerTick(TickEvent.ServerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return;
-
-
+    public static void onServerTick(ServerTickEvent.Post event) {
+        if (queue.isEmpty()) return; // Quick optimization
 
         List<ScheduledShot> remaining = new ArrayList<>();
-
         Iterator<ScheduledShot> it = queue.iterator();
+
         while (it.hasNext()) {
             ScheduledShot shot = it.next();
             int left = shot.ticksLeft() - 1;
@@ -67,9 +66,10 @@ public class DelayedShotScheduler {
                 ));
             } else {
                 LivingEntity shooter = shot.shooter();
-                if (shooter != null && shooter.level() instanceof ServerLevel level) {
+                if (shooter != null && shooter.isAlive() && shooter.level() instanceof ServerLevel level) {
                     ItemStack safeStack = shot.stack().copy();
-                    if (!RepeaterHelper.getProjectiles(safeStack).isEmpty()) {
+
+                    if (VanadiumRepeaterItem.isCharged(safeStack)) {
 
                         RepeaterHelper.fireSingleVolley(
                                 level,
@@ -83,6 +83,7 @@ public class DelayedShotScheduler {
                 }
             }
         }
+
         queue.clear();
         queue.addAll(remaining);
     }

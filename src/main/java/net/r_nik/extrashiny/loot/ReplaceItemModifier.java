@@ -1,25 +1,25 @@
 package net.r_nik.extrashiny.loot;
 
 import com.google.common.base.Suppliers;
-import com.mojang.serialization.Codec;
+import com.mojang.serialization.MapCodec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.predicates.LootItemCondition;
-import net.minecraftforge.common.loot.IGlobalLootModifier;
-import net.minecraftforge.common.loot.LootModifier;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.neoforge.common.loot.IGlobalLootModifier;
+import net.neoforged.neoforge.common.loot.LootModifier;
 
 import java.util.function.Supplier;
 
 public class ReplaceItemModifier extends LootModifier {
-    public static final Supplier<Codec<ReplaceItemModifier>> CODEC = Suppliers.memoize(() ->
-            RecordCodecBuilder.create(inst -> codecStart(inst).and(
+    public static final Supplier<MapCodec<ReplaceItemModifier>> CODEC = Suppliers.memoize(() ->
+            RecordCodecBuilder.mapCodec(inst -> codecStart(inst).and(
                     inst.group(
-                            ForgeRegistries.ITEMS.getCodec().fieldOf("target").forGetter(m -> m.targetItem),
-                            ForgeRegistries.ITEMS.getCodec().fieldOf("replacement").forGetter(m -> m.replacementItem)
+                            BuiltInRegistries.ITEM.byNameCodec().fieldOf("target").forGetter(m -> m.targetItem),
+                            BuiltInRegistries.ITEM.byNameCodec().fieldOf("replacement").forGetter(m -> m.replacementItem)
                     )
             ).apply(inst, ReplaceItemModifier::new))
     );
@@ -39,7 +39,6 @@ public class ReplaceItemModifier extends LootModifier {
             ItemStack stack = generatedLoot.get(i);
 
             if (stack.is(targetItem)) {
-
                 generatedLoot.set(i, new ItemStack(replacementItem, stack.getCount()));
             }
         }
@@ -47,7 +46,7 @@ public class ReplaceItemModifier extends LootModifier {
     }
 
     @Override
-    public Codec<? extends IGlobalLootModifier> codec() {
+    public MapCodec<? extends IGlobalLootModifier> codec() {
         return CODEC.get();
     }
 }

@@ -1,25 +1,25 @@
 package net.r_nik.extrashiny.attribute;
 
+import net.minecraft.core.registries.Registries;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.RangedAttribute;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
+import net.neoforged.neoforge.registries.DeferredRegister;
+import net.neoforged.neoforge.registries.DeferredHolder;
 import net.r_nik.extrashiny.ExtraShiny;
 
 public class ModAttributes {
 
     public static final DeferredRegister<Attribute> ATTRIBUTES =
-            DeferredRegister.create(ForgeRegistries.ATTRIBUTES, ExtraShiny.MOD_ID);
+            DeferredRegister.create(Registries.ATTRIBUTE, ExtraShiny.MOD_ID);
 
-    public static final RegistryObject<Attribute> DAMAGE_NEGATION =
+    public static final DeferredHolder<Attribute, Attribute> DAMAGE_NEGATION =
             ATTRIBUTES.register("damage_negation",
                     () -> new RangedAttribute("attribute." + ExtraShiny.MOD_ID + ".damage_negation",
                             0.0D,
                             0.0D,
                             1024.0D).setSyncable(true));
 
-    public static final RegistryObject<Attribute> SHOCK_ABSORPTION =
+    public static final DeferredHolder<Attribute, Attribute> SHOCK_ABSORPTION =
             ATTRIBUTES.register("shock_absorption",
                     () -> new RangedAttribute(
                             "attribute." + ExtraShiny.MOD_ID + ".shock_absorption",
@@ -28,7 +28,7 @@ public class ModAttributes {
                             0.9D
                     ).setSyncable(true));
 
-    public static final RegistryObject<Attribute> DAMAGE_REBOUND =
+    public static final DeferredHolder<Attribute, Attribute> DAMAGE_REBOUND =
             ATTRIBUTES.register("damage_rebound",
                     () -> new RangedAttribute(
                             "attribute." + ExtraShiny.MOD_ID + ".damage_rebound",
@@ -37,7 +37,7 @@ public class ModAttributes {
                             1.0D
                     ).setSyncable(true));
 
-    public static final RegistryObject<Attribute> COUNTER_THORNS =
+    public static final DeferredHolder<Attribute, Attribute> COUNTER_THORNS =
             ATTRIBUTES.register("counter_thorns",
                     () -> new RangedAttribute(
                             "attribute." + ExtraShiny.MOD_ID + ".counter_thorns",
@@ -46,7 +46,7 @@ public class ModAttributes {
                             1.0D
                     ).setSyncable(true));
 
-    public static final RegistryObject<Attribute> CRIT_DAMAGE_BONUS =
+    public static final DeferredHolder<Attribute, Attribute> CRIT_DAMAGE_BONUS =
             ATTRIBUTES.register("crit_damage_bonus",
                     () -> new RangedAttribute(
                             "attribute." + ExtraShiny.MOD_ID + ".crit_damage_bonus",
@@ -55,7 +55,7 @@ public class ModAttributes {
                             10.0D
                     ).setSyncable(true));
 
-    public static final RegistryObject<Attribute> ARMOR_PIERCING =
+    public static final DeferredHolder<Attribute, Attribute> ARMOR_PIERCING =
             ATTRIBUTES.register("armor_piercing",
                     () -> new RangedAttribute(
                             "attribute." + ExtraShiny.MOD_ID + ".armor_piercing",

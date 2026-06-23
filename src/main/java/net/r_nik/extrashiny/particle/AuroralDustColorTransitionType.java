@@ -1,18 +1,23 @@
 package net.r_nik.extrashiny.particle;
 
-import com.mojang.serialization.Codec;
-import net.minecraft.client.particle.ParticleRenderType;
+import com.mojang.serialization.MapCodec;
 import net.minecraft.core.particles.ParticleType;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.StreamCodec;
 
 public class AuroralDustColorTransitionType extends ParticleType<AuroralDustColorTransitionOptions> {
 
     public AuroralDustColorTransitionType() {
-        super(true, AuroralDustColorTransitionOptions.DESERIALIZER);
+        super(true);
     }
 
+    @Override
+    public MapCodec<AuroralDustColorTransitionOptions> codec() {
+        return AuroralDustColorTransitionOptions.CODEC;
+    }
 
     @Override
-    public Codec<AuroralDustColorTransitionOptions> codec() {
-        return AuroralDustColorTransitionOptions.CODEC;
+    public StreamCodec<? super RegistryFriendlyByteBuf, AuroralDustColorTransitionOptions> streamCodec() {
+        return AuroralDustColorTransitionOptions.STREAM_CODEC;
     }
 }

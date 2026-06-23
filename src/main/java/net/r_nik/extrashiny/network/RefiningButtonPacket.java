@@ -1,38 +1,37 @@
 package net.r_nik.extrashiny.network;
 
-import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.network.codec.ByteBufCodecs;
+import net.minecraft.network.codec.StreamCodec;
+import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraftforge.network.NetworkEvent;
+import net.r_nik.extrashiny.ExtraShiny;
 import net.r_nik.extrashiny.screen.RefiningTableMenu;
 
-import java.util.function.Supplier;
+public record RefiningButtonPacket(boolean overcap) implements CustomPacketPayload {
 
-public class RefiningButtonPacket {
+    public static final Type<RefiningButtonPacket> TYPE =
+            new Type<>(ResourceLocation.fromNamespaceAndPath(ExtraShiny.MOD_ID, "refining_button"));
 
-    private final boolean overcap;
+    public static final StreamCodec<RegistryFriendlyByteBuf, RefiningButtonPacket> STREAM_CODEC =
+            StreamCodec.composite(
+                    ByteBufCodecs.BOOL, RefiningButtonPacket::overcap,
+                    RefiningButtonPacket::new
+            );
 
-    public RefiningButtonPacket(boolean overcap) {
-        this.overcap = overcap;
+    @Override
+    public Type<? extends CustomPacketPayload> type() {
+        return TYPE;
     }
 
-    public RefiningButtonPacket(FriendlyByteBuf buf) {
-        this.overcap = buf.readBoolean();
-    }
-
-    public void toBytes(FriendlyByteBuf buf) {
-        buf.writeBoolean(overcap);
-    }
-
-    public void handle(Supplier<NetworkEvent.Context> ctx) {
-        ctx.get().enqueueWork(() -> {
-            ServerPlayer player = ctx.get().getSender();
-            if (player == null) return;
-
-            if (player.containerMenu instanceof RefiningTableMenu menu) {
-                menu.refine(overcap);
+    public static void handle(RefiningButtonPacket packet, net.neoforged.neoforge.network.handling.IPayloadContext context) {
+        context.enqueueWork(() -> {
+            if (context.player() instanceof ServerPlayer player) {
+                if (player.containerMenu instanceof RefiningTableMenu menu) {
+                    menu.refine(packet.overcap());
+                }
             }
         });
-
-        ctx.get().setPacketHandled(true);
     }
 }

@@ -1,35 +1,26 @@
 package net.r_nik.extrashiny.network;
 
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.network.event.RegisterPayloadHandlersEvent;
+import net.neoforged.neoforge.network.registration.PayloadRegistrar;
 import net.r_nik.extrashiny.ExtraShiny;
 
-
+@EventBusSubscriber(modid = ExtraShiny.MOD_ID)
 public class ModMessages {
 
-    private static final String PROTOCOL_VERSION = "1";
+    @SubscribeEvent
+    public static void register(final RegisterPayloadHandlersEvent event) {
+        final PayloadRegistrar registrar = event.registrar("1");
 
-    public static final SimpleChannel INSTANCE = NetworkRegistry.newSimpleChannel(
-            new ResourceLocation(ExtraShiny.MOD_ID, "main"),
-            () -> PROTOCOL_VERSION,
-            PROTOCOL_VERSION::equals,
-            PROTOCOL_VERSION::equals
-    );
-
-    public static void register() {
-        int id = 0;
-
-        INSTANCE.registerMessage(
-                id++,
-                RefiningButtonPacket.class,
-                RefiningButtonPacket::toBytes,
-                RefiningButtonPacket::new,
+        registrar.playToServer(
+                RefiningButtonPacket.TYPE,
+                RefiningButtonPacket.STREAM_CODEC,
                 RefiningButtonPacket::handle
         );
     }
 
-    public static void sendToServer(Object msg) {
-        INSTANCE.sendToServer(msg);
+    public static void sendToServer(RefiningButtonPacket packet) {
+        net.neoforged.neoforge.network.PacketDistributor.sendToServer(packet);
     }
 }

@@ -1,61 +1,46 @@
 package net.r_nik.extrashiny.event;
 
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.alchemy.PotionUtils;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.alchemy.PotionContents;
 import net.minecraft.world.item.alchemy.Potions;
-import net.minecraftforge.common.brewing.BrewingRecipe;
-import net.minecraftforge.common.brewing.BrewingRecipeRegistry;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.lifecycle.FMLCommonSetupEvent;
+import net.neoforged.neoforge.common.brewing.BrewingRecipeRegistry;
 import net.r_nik.extrashiny.ExtraShiny;
 import net.r_nik.extrashiny.item.ModItems;
 import net.r_nik.extrashiny.potion.ModPotions;
 
-@Mod.EventBusSubscriber(modid = ExtraShiny.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = ExtraShiny.MOD_ID)
 public class ModBrewingRecipes {
 
     @SubscribeEvent
     public static void onCommonSetup(FMLCommonSetupEvent event) {
         event.enqueueWork(() -> {
+            // Note: We use PotionContents.createItemStack instead of PotionUtils
 
-            BrewingRecipeRegistry.addRecipe(new BrewingRecipe(
-                    Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.AWKWARD)),
-                    Ingredient.of(ModItems.ANCIENT_LATTICE.get()),
-                    PotionUtils.setPotion(new ItemStack(Items.POTION), ModPotions.DECEIVER.get())
-            ));
+            // Deceiver Recipes
+            register(Potions.AWKWARD, ModItems.ANCIENT_LATTICE, ModPotions.DECEIVER);
+            register(ModPotions.DECEIVER, Items.GLOWSTONE_DUST, ModPotions.STRONG_DECEIVER);
+            register(ModPotions.DECEIVER, Items.REDSTONE, ModPotions.LONG_DECEIVER);
 
-            BrewingRecipeRegistry.addRecipe(new BrewingRecipe(
-                    Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.POTION), ModPotions.DECEIVER.get())),
-                    Ingredient.of(Items.GLOWSTONE_DUST),
-                    PotionUtils.setPotion(new ItemStack(Items.POTION), ModPotions.STRONG_DECEIVER.get())
-            ));
-
-            BrewingRecipeRegistry.addRecipe(new BrewingRecipe(
-                    Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.POTION), ModPotions.DECEIVER.get())),
-                    Ingredient.of(Items.REDSTONE),
-                    PotionUtils.setPotion(new ItemStack(Items.POTION), ModPotions.LONG_DECEIVER.get())
-            ));
-
-            BrewingRecipeRegistry.addRecipe(new BrewingRecipe(
-                    Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.POTION), Potions.AWKWARD)),
-                    Ingredient.of(ModItems.LABRADORITE.get()),
-                    PotionUtils.setPotion(new ItemStack(Items.POTION), ModPotions.WISDOM.get())
-            ));
-
-            BrewingRecipeRegistry.addRecipe(new BrewingRecipe(
-                    Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.POTION), ModPotions.WISDOM.get())),
-                    Ingredient.of(Items.GLOWSTONE_DUST),
-                    PotionUtils.setPotion(new ItemStack(Items.POTION), ModPotions.STRONG_WISDOM.get())
-            ));
-
-            BrewingRecipeRegistry.addRecipe(new BrewingRecipe(
-                    Ingredient.of(PotionUtils.setPotion(new ItemStack(Items.POTION), ModPotions.WISDOM.get())),
-                    Ingredient.of(Items.REDSTONE),
-                    PotionUtils.setPotion(new ItemStack(Items.POTION), ModPotions.LONG_WISDOM.get())
-            ));
+            // Wisdom Recipes
+            register(Potions.AWKWARD, ModItems.LABRADORITE, ModPotions.WISDOM);
+            register(ModPotions.WISDOM, Items.GLOWSTONE_DUST, ModPotions.STRONG_WISDOM);
+            register(ModPotions.WISDOM, Items.REDSTONE, ModPotions.LONG_WISDOM);
         });
+    }
+
+    private static void register(net.minecraft.core.Holder<net.minecraft.world.item.alchemy.Potion> input,
+                                 net.minecraft.world.level.ItemLike ingredient,
+                                 net.minecraft.core.Holder<net.minecraft.world.item.alchemy.Potion> output) {
+
+        BrewingRecipeRegistry.addRecipe(
+                Ingredient.of(PotionContents.createItemStack(Items.POTION, input)),
+                Ingredient.of(ingredient),
+                PotionContents.createItemStack(Items.POTION, output)
+        );
     }
 }

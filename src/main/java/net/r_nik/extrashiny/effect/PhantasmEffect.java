@@ -4,6 +4,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
@@ -14,15 +15,17 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.phys.AABB;
+import net.r_nik.extrashiny.ExtraShiny;
 import org.joml.Vector3f;
 
 import java.util.List;
-import java.util.UUID;
 
 public class PhantasmEffect extends MobEffect {
 
-    private static final UUID PHANTASM_SPEED_UUID = UUID.fromString("b3e21a4f-5692-4f30-81f1-a123f15c102a");
-    private static final UUID PHANTASM_ATK_SPEED_UUID = UUID.fromString("c4f32b50-67a3-5041-9202-b234026d213b");
+    private static final ResourceLocation PHANTASM_SPEED_ID =
+            ResourceLocation.fromNamespaceAndPath(ExtraShiny.MOD_ID, "phantasm_speed");
+    private static final ResourceLocation PHANTASM_ATK_SPEED_ID =
+            ResourceLocation.fromNamespaceAndPath(ExtraShiny.MOD_ID, "phantasm_attack_speed");
 
     private static final double MULTIPLIER_PER_ENTITY = 0.05;
 
@@ -31,8 +34,8 @@ public class PhantasmEffect extends MobEffect {
     }
 
     @Override
-    public void applyEffectTick(LivingEntity entity, int amplifier) {
-        if (entity.level().isClientSide()) return;
+    public boolean applyEffectTick(LivingEntity entity, int amplifier) {
+        if (entity.level().isClientSide()) return true;
 
         ServerLevel level = (ServerLevel) entity.level();
 
@@ -60,27 +63,31 @@ public class PhantasmEffect extends MobEffect {
         }
 
         spawnRadiusParticles(level, entity, radius);
+
+        return true;
     }
 
     private void updateAttributes(LivingEntity entity, int entityCount) {
         AttributeInstance speedAttr = entity.getAttribute(Attributes.MOVEMENT_SPEED);
         if (speedAttr != null) {
-            speedAttr.removeModifier(PHANTASM_SPEED_UUID);
+            speedAttr.removeModifier(PHANTASM_SPEED_ID);
             if (entityCount > 0) {
                 speedAttr.addTransientModifier(new AttributeModifier(
-                        PHANTASM_SPEED_UUID, "Phantasm Speed",
-                        entityCount * MULTIPLIER_PER_ENTITY, AttributeModifier.Operation.MULTIPLY_TOTAL));
+                        PHANTASM_SPEED_ID,
+                        entityCount * MULTIPLIER_PER_ENTITY,
+                        AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
             }
         }
 
         if (entity instanceof Player) {
             AttributeInstance attackSpeedAttr = entity.getAttribute(Attributes.ATTACK_SPEED);
             if (attackSpeedAttr != null) {
-                attackSpeedAttr.removeModifier(PHANTASM_ATK_SPEED_UUID);
+                attackSpeedAttr.removeModifier(PHANTASM_ATK_SPEED_ID);
                 if (entityCount > 0) {
                     attackSpeedAttr.addTransientModifier(new AttributeModifier(
-                            PHANTASM_ATK_SPEED_UUID, "Phantasm Attack Speed",
-                            entityCount * MULTIPLIER_PER_ENTITY, AttributeModifier.Operation.MULTIPLY_TOTAL));
+                            PHANTASM_ATK_SPEED_ID,
+                            entityCount * MULTIPLIER_PER_ENTITY,
+                            AttributeModifier.Operation.ADD_MULTIPLIED_TOTAL));
                 }
             }
         }
@@ -103,17 +110,17 @@ public class PhantasmEffect extends MobEffect {
     }
 
     @Override
-    public boolean isDurationEffectTick(int duration, int amplifier) {
+    public boolean shouldApplyEffectTickThisTick(int duration, int amplifier) {
         return duration % 5 == 0;
     }
 
     @Override
-    public void removeAttributeModifiers(LivingEntity entity, AttributeMap map, int amplifier) {
-        super.removeAttributeModifiers(entity, map, amplifier);
-        AttributeInstance speedAttr = entity.getAttribute(Attributes.MOVEMENT_SPEED);
-        if (speedAttr != null) speedAttr.removeModifier(PHANTASM_SPEED_UUID);
+    public void removeAttributeModifiers(AttributeMap map) {
+        super.removeAttributeModifiers(map);
+        AttributeInstance speedAttr = map.getInstance(Attributes.MOVEMENT_SPEED);
+        if (speedAttr != null) speedAttr.removeModifier(PHANTASM_SPEED_ID);
 
-        AttributeInstance attackSpeedAttr = entity.getAttribute(Attributes.ATTACK_SPEED);
-        if (attackSpeedAttr != null) attackSpeedAttr.removeModifier(PHANTASM_ATK_SPEED_UUID);
+        AttributeInstance attackSpeedAttr = map.getInstance(Attributes.ATTACK_SPEED);
+        if (attackSpeedAttr != null) attackSpeedAttr.removeModifier(PHANTASM_ATK_SPEED_ID);
     }
 }

@@ -4,9 +4,9 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.vehicle.AbstractMinecart;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent; // NeoForge import
+import net.neoforged.fml.common.EventBusSubscriber; // NeoForge import
+import net.neoforged.neoforge.event.tick.LevelTickEvent; // NeoForge import
 import net.r_nik.extrashiny.ExtraShiny;
 
 import java.util.HashMap;
@@ -14,7 +14,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
-@Mod.EventBusSubscriber(modid = ExtraShiny.MOD_ID)
+// Added bus = EventBusSubscriber.Bus.GAME to ensure it registers correctly
+@EventBusSubscriber(modid = ExtraShiny.MOD_ID)
 public class LeapRailLaunchHandler {
 
     private static final double LIFT_Y = 0.28D;
@@ -44,10 +45,10 @@ public class LeapRailLaunchHandler {
         PENDING.put(cart.getUUID(), new LaunchData(1, FORCE_TICKS, vx, vz));
     }
 
+    // LevelTickEvent.Post replaces the old TickEvent.Phase.END
     @SubscribeEvent
-    public static void onLevelTick(TickEvent.LevelTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return;
-        if (!(event.level instanceof ServerLevel serverLevel)) return;
+    public static void onLevelTick(LevelTickEvent.Post event) {
+        if (!(event.getLevel() instanceof ServerLevel serverLevel)) return;
         if (PENDING.isEmpty()) return;
 
         Iterator<Map.Entry<UUID, LaunchData>> it = PENDING.entrySet().iterator();
@@ -71,6 +72,8 @@ public class LeapRailLaunchHandler {
                 continue;
             }
 
+            // Using setPos is fine, but in 1.21, ensure you aren't fighting
+            // the physics engine too hard if the minecart is on a rail.
             cart.setPos(cart.getX(), cart.getY() + LIFT_Y, cart.getZ());
             cart.setOnGround(false);
 
@@ -79,6 +82,8 @@ public class LeapRailLaunchHandler {
 
             cart.setDeltaMovement(data.vx, newY, data.vz);
             cart.resetFallDistance();
+
+            // hasImpulse ensures the physics engine treats this as an active movement
             cart.hasImpulse = true;
 
             cart.setHurtTime(0);

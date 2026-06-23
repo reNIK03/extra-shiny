@@ -6,10 +6,7 @@ import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.builders.*;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.api.distmarker.OnlyIn;
 
-@OnlyIn(Dist.CLIENT)
 public class DamaskArmorModel<T extends LivingEntity> extends HumanoidArmorModel<T> {
 
     public static final DamaskArmorModel<?> OUTER =

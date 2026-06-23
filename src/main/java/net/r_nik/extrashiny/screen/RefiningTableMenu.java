@@ -10,8 +10,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.SlotItemHandler;
+import net.neoforged.neoforge.items.IItemHandler;
+import net.neoforged.neoforge.items.SlotItemHandler;
 import net.r_nik.extrashiny.block.ModBlocks;
 import net.r_nik.extrashiny.block.entity.RefiningTableEntity;
 import net.r_nik.extrashiny.item.ModItems;
@@ -20,7 +20,6 @@ public class RefiningTableMenu extends AbstractContainerMenu {
 
     private final RefiningTableEntity blockEntity;
     private final Level level;
-
 
     public RefiningTableEntity getBlockEntity() {
         return blockEntity;
@@ -36,8 +35,7 @@ public class RefiningTableMenu extends AbstractContainerMenu {
         this.blockEntity = (RefiningTableEntity) entity;
         this.level = inv.player.level();
 
-        IItemHandler handler = blockEntity.getItemHandler()
-                .orElseThrow(() -> new IllegalStateException("RefiningTable item handler missing"));
+        IItemHandler handler = blockEntity.getItemHandler();
 
         this.addSlot(new SlotItemHandler(handler,
                 RefiningTableEntity.SLOT_LABRADORITE,
@@ -117,9 +115,7 @@ public class RefiningTableMenu extends AbstractContainerMenu {
                 return ItemStack.EMPTY;
             }
             slot.setChanged();
-        }
-
-        else {
+        } else {
             boolean moved = false;
 
             if (stack.is(ModItems.LABRADORITE.get())) {
@@ -127,23 +123,17 @@ public class RefiningTableMenu extends AbstractContainerMenu {
                         RefiningTableEntity.SLOT_LABRADORITE,
                         RefiningTableEntity.SLOT_LABRADORITE + 1,
                         false);
-            }
-
-            else if (stack.is(Items.LAPIS_LAZULI)) {
+            } else if (stack.is(Items.LAPIS_LAZULI)) {
                 moved = this.moveItemStackTo(stack,
                         RefiningTableEntity.SLOT_LAPIS,
                         RefiningTableEntity.SLOT_LAPIS + 1,
                         false);
-            }
-
-            else if (stack.is(Items.GOLD_INGOT)) {
+            } else if (stack.is(Items.GOLD_INGOT)) {
                 moved = this.moveItemStackTo(stack,
                         RefiningTableEntity.SLOT_GOLD,
                         RefiningTableEntity.SLOT_GOLD + 1,
                         false);
-            }
-
-            else if (this.getSlot(RefiningTableEntity.SLOT_ITEM).mayPlace(stack)) {
+            } else if (this.getSlot(RefiningTableEntity.SLOT_ITEM).mayPlace(stack)) {
                 moved = this.moveItemStackTo(stack,
                         RefiningTableEntity.SLOT_ITEM,
                         RefiningTableEntity.SLOT_ITEM + 1,
@@ -163,7 +153,6 @@ public class RefiningTableMenu extends AbstractContainerMenu {
         return original;
     }
 
-
     @Override
     public boolean stillValid(Player player) {
         return stillValid(
@@ -177,15 +166,12 @@ public class RefiningTableMenu extends AbstractContainerMenu {
         if (!getSlot(RefiningTableEntity.SLOT_GOLD).getItem().isEmpty()) {
             return false;
         }
-
-        return blockEntity.canRefine()
-                && !canOvercapRefine();
+        return blockEntity.canRefine() && !canOvercapRefine();
     }
 
     public boolean canOvercapRefine() {
         return blockEntity.canOvercapRefine();
     }
-
 
     public void refine(boolean overcap) {
         if (level.isClientSide) return;

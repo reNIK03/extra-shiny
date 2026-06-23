@@ -1,14 +1,16 @@
 package net.r_nik.extrashiny.event;
 
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.CustomData;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraftforge.event.AnvilUpdateEvent;
-import net.minecraftforge.event.TickEvent;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.AnvilUpdateEvent;
+import net.neoforged.neoforge.event.entity.EntityJoinLevelEvent;
+import net.neoforged.neoforge.event.tick.PlayerTickEvent;
 
 import net.r_nik.extrashiny.ExtraShiny;
 import net.r_nik.extrashiny.item.ModItems;
@@ -17,22 +19,14 @@ import net.r_nik.extrashiny.item.OreTrackerUtil;
 import net.r_nik.extrashiny.entity.VanadiumGolemEntity;
 import net.r_nik.extrashiny.entity.ai.TargetVanadiumGolemGoal;
 
-@Mod.EventBusSubscriber(
-        modid = ExtraShiny.MOD_ID,
-        bus = Mod.EventBusSubscriber.Bus.FORGE
-)
-
-
-
+@EventBusSubscriber(modid = ExtraShiny.MOD_ID)
 public class ForgeBusEvents {
 
 
     @SubscribeEvent
-    public static void onPlayerTick(TickEvent.PlayerTickEvent event) {
-        if (event.phase != TickEvent.Phase.END) return;
-        if (event.player.level().isClientSide) return;
-
-        Player player = event.player;
+    public static void onPlayerTick(PlayerTickEvent.Post event) {
+        Player player = event.getEntity();
+        if (player.level().isClientSide) return;
 
         for (int i = 0; i < 9; i++) {
             scanTracker(player, player.getInventory().getItem(i));
@@ -43,13 +37,15 @@ public class ForgeBusEvents {
 
     private static void scanTracker(Player player, ItemStack stack) {
         if (!(stack.getItem() instanceof OreTrackerItem)) return;
-        if (!stack.hasTag() || !stack.getTag().contains("StoredItem")) return;
 
-        CompoundTag tag = stack.getOrCreateTag();
+        CompoundTag tag = stack.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
+        if (!tag.contains("StoredItem")) return;
 
         int cooldown = tag.getInt("ScanCooldown");
         if (cooldown > 0) {
-            tag.putInt("ScanCooldown", cooldown - 1);
+            int finalCooldown = cooldown;
+            stack.update(DataComponents.CUSTOM_DATA, CustomData.EMPTY,
+                    data -> data.update(t -> t.putInt("ScanCooldown", finalCooldown - 1)));
             return;
         }
 
@@ -59,8 +55,10 @@ public class ForgeBusEvents {
                 stack
         );
 
-        tag.putInt("NearestOreDist", dist);
-        tag.putInt("ScanCooldown", 10);
+        stack.update(DataComponents.CUSTOM_DATA, CustomData.EMPTY, data -> data.update(t -> {
+            t.putInt("NearestOreDist", dist);
+            t.putInt("ScanCooldown", 10);
+        }));
     }
 
     @SubscribeEvent
@@ -91,18 +89,19 @@ public class ForgeBusEvents {
         if (left.isEmpty() || right.isEmpty() || !left.isDamageableItem()) return;
 
         if (right.is(ModItems.MEMORY_ALLOY.get())) {
-            CompoundTag tag = left.getOrCreateTag();
+            CompoundTag tag = left.getOrDefault(DataComponents.CUSTOM_DATA, CustomData.EMPTY).copyTag();
 
             if (tag.contains("MemoryDurability") && tag.getInt("MemoryDurability") > 0) {
                 return;
             }
 
             ItemStack output = left.copy();
-            CompoundTag outputTag = output.getOrCreateTag();
 
             int extraDura = (int) (left.getMaxDamage() * 0.25f);
-            outputTag.putInt("MemoryDurability", extraDura);
-            outputTag.putInt("MaxMemoryDurability", extraDura);
+            output.update(DataComponents.CUSTOM_DATA, CustomData.EMPTY, data -> data.update(t -> {
+                t.putInt("MemoryDurability", extraDura);
+                t.putInt("MaxMemoryDurability", extraDura);
+            }));
 
             event.setOutput(output);
             event.setCost(5);
